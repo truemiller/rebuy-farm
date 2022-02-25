@@ -59,11 +59,11 @@ function App() {
     const [accounts, setAccounts] = useState([])
 
     useEffect(async () => {
+        setAccounts(await Metamask.address())
+        setChainId(await Metamask.chainId())
     }, [])
 
     useEffect(async () => {
-            setAccounts(await Metamask.address())
-            setChainId(await Metamask.chainId())
 
             window.ethereum.on('chainChanged', () => {
                 window.location.reload();
@@ -91,18 +91,22 @@ function Navbar(props) {
     let chainId = props.chainId;
     let accounts = props.accounts;
 
+
     return <nav className="navbar bg-white shadow-lg">
         <div className="container">
             <a href="#" className="navbar-brand  fw-bolder">Rebuy Farm</a>
-            <div className="nav-link">Connected to chain: {chainIds[chainId] ?? "Undefined"}</div>
-            <div className="nav-link">Wallet: {accounts}</div>
+            <div className="nav-link">Connected to chain: {chainIds[chainId] ?? "Unrecognized"}</div>
+            <div className="nav-link">Wallet: {accounts ?? "None"}</div>
         </div>
     </nav>
 }
 
 function VaultTable(props) {
-    const accounts = props.accounts
-    const chainId = props.chainId
+    const accounts = props.accounts ?? []
+    const chainId = props.chainId ?? null
+    const isConnected = accounts.length > 0
+
+
     return <>
         <table className="table bg-white rounded border shadow-lg ">
             <thead>
@@ -124,11 +128,13 @@ function VaultTable(props) {
                 const farm = vault.farm
                 const vaultChainId = vault.chain.chainId
                 return vaultChainId === chainId ?
-                    <VaultTableRow vault={vault} farm={farm} vaultKey={vaultKey} key={vaultKey} accounts={accounts}/> : null
+                    <VaultTableRow vault={vault} farm={farm} vaultKey={vaultKey} key={vaultKey}
+                                   accounts={accounts}/> : null
             })}
             </tbody>
         </table>
     </>
+
 }
 
 function VaultTableRow(props) {
@@ -152,7 +158,7 @@ function VaultTableRow(props) {
         const walletBalance = await farm.token.balanceOfPromise().then(r => web3.utils.fromWei(r.toString()))
         const initialStake = await vault.depositedPromise().then(r => web3.utils.fromWei(r.toString()))
         const isApproved = await vault.isApprovedPromise().then(r => r)
-        const currentStake = await vault.getPricePerFullSharePromise().then(r=>web3.utils.fromWei(r.toString())) * initialStake
+        const currentStake = await vault.getPricePerFullSharePromise().then(r => web3.utils.fromWei(r.toString())) * initialStake
         const apr = null
         const apy = null
 
@@ -175,7 +181,7 @@ function VaultTableRow(props) {
         <td>{apr ? apr + "%" : <Skeleton/>}</td>
         <td>{apy ? apy + "%" : <Skeleton/>}</td>
         <td>{tvl ? parseFloat(tvl).toFixed(4) : <Skeleton/>}</td>
-        <td>{wallet ? parseFloat(wallet).toFixed(4) : <Skeleton />}</td>
+        <td>{wallet ? parseFloat(wallet).toFixed(4) : <Skeleton/>}</td>
         <td>{deposited ? parseFloat(deposited).toFixed(4) : <Skeleton/>}</td>
         <td>{currentStake ? parseFloat(currentStake).toFixed(4) : <Skeleton/>}</td>
         <td>
