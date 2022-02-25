@@ -4,7 +4,8 @@ import {Component} from "react";
 
 class Vault {
 
-    constructor(platform, farm, address, strategy) {
+    constructor(chain, platform, farm, address, strategy) {
+        this.chain=chain;
         this.platform = platform;
         this.farm = farm;
         this.address = address;
