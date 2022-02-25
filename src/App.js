@@ -1,8 +1,10 @@
 import logo from './logo.svg'
-import "../node_modules/bootstrap/dist/css/bootstrap.css"
+import "../node_modules/bootswatch/dist/zephyr/bootstrap.css"
 import {Fragment, useEffect, useState} from "react"
 import "./App.css"
 
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 import web3 from "web3"
 
 import Metamask from "./class/Metamask"
@@ -14,6 +16,11 @@ import Vault from "./class/Vault"
 import Strategy from "./class/Strategy"
 import Chain from "./class/Chain"
 
+
+const chains = {
+    avax: new Chain("Avalanche", "0xa86a"),
+    matic: new Chain("Polygon", "0x89"),
+}
 
 const platforms = {
     elk: new Platform("ELK", "https://4126527139-files.gitbook.io/~/files/v0/b/gitbook-28427.appspot.com/o/assets%2F-MW_PNk7A0t0ux_cdlkt%2F-MiWHF5mPB0N_QTE7e-j%2F-MiWHWQjSbekcPtPUdwV%2FElkLogo%20512x512.svg?alt=media&token=27da238a-7b85-4ea8-b1f0-8a67aeaf2049")
@@ -31,7 +38,7 @@ const tokens = {
 }
 
 const farms = {
-    elkWavax: new Farm("ELKWAVAX", tokens.elkWavax, platforms.elk),
+    elkWavax: new Farm(chains.avax, "ELKWAVAX", "0x9ec3ca469F415a7e55A21Dc662D427d59e8De8F6", tokens.elkWavax, platforms.elk),
     // elkUsdte: new Farm("ELKUSDT", tokens.elkUsdte, platforms.elk),
     // elkPng: new Farm("ELKPNG", tokens.elkPng, platforms.elk),
     // elkDcau: new Farm("ELKDCAU", tokens.elkDcau, platforms.elk),
@@ -41,18 +48,11 @@ const strategies = {
     elkWavax: new Strategy("ELKWAVAX", "0xb90cFF851899C56f10Da6125EE790004e3eeC426")
 }
 
-const chains = {
-    avax: new Chain("Avalanche", "0xa86a"),
-    matic: new Chain("Polygon", "0x89")
-}
 
 const vaults = {
     elkWavax: new Vault(chains.avax, platforms.elk, farms.elkWavax, "0xd1b524ee1d1278b4770c5d6c97Cf70D3F73358a6", strategies.elkWavax),
     // elkPolygon: new Vault(chains.matic, platforms.elk, farms.elkWavax, "0xd1b524ee1d1278b4770c5d6c97Cf70D3F73358a6", strategies.elkWavax)
 }
-
-
-
 
 function App() {
     const [chainId, setChainId] = useState("")
@@ -81,7 +81,7 @@ function App() {
             <div className="container mt-3">
                 <h1 className={"fw-bolder "}>Rebuy Farm</h1>
                 <p className={"text-muted"}>The cross chain yield optimizer</p>
-                <Farms accounts={accounts} chainId={chainId}/>
+                <VaultTable accounts={accounts} chainId={chainId}/>
             </div>
         </Fragment>
     );
@@ -91,7 +91,7 @@ function Navbar(props) {
     let chainId = props.chainId;
     let accounts = props.accounts;
 
-    return <nav className="navbar bg-white shadow">
+    return <nav className="navbar bg-white shadow-lg">
         <div className="container">
             <a href="#" className="navbar-brand  fw-bolder">Rebuy Farm</a>
             <div className="nav-link">Connected to chain: {chainIds[chainId] ?? "Undefined"}</div>
@@ -100,11 +100,11 @@ function Navbar(props) {
     </nav>
 }
 
-function Farms(props) {
+function VaultTable(props) {
     const accounts = props.accounts
     const chainId = props.chainId
     return <>
-        <table className="table bg-white shadow ">
+        <table className="table bg-white rounded border shadow-lg ">
             <thead>
             <tr>
                 <th>Platform</th>
@@ -114,7 +114,8 @@ function Farms(props) {
                 <th>APY</th>
                 <th>TVL</th>
                 <th>Wallet</th>
-                <th>Deposited</th>
+                <th>Initial stake</th>
+                <th>Current stake</th>
             </tr>
             </thead>
             <tbody>
@@ -123,31 +124,45 @@ function Farms(props) {
                 const farm = vault.farm
                 const vaultChainId = vault.chain.chainId
                 return vaultChainId === chainId ?
-                    <VaultRow vault={vault} farm={farm} vaultKey={vaultKey} key={vaultKey} accounts={accounts}/> : null
+                    <VaultTableRow vault={vault} farm={farm} vaultKey={vaultKey} key={vaultKey} accounts={accounts}/> : null
             })}
             </tbody>
         </table>
     </>
 }
 
-function VaultRow(props) {
+function VaultTableRow(props) {
     let vault = props.vault
     let farm = props.farm
     let vaultKey = props.vaultKey
     let [accounts, setAccounts] = useState(props.accounts)
 
-    let [tvl, setTvl] = useState("0")
-    let [wallet, setWallet] = useState("0")
-    let [deposited, setDeposited] = useState(0)
+    let [tvl, setTvl] = useState()
+    let [wallet, setWallet] = useState()
+    let [deposited, setDeposited] = useState()
+    let [currentStake, setCurrentStake] = useState()
+    let [apr, setApr] = useState()
+    let [apy, setApy] = useState()
 
     let [approved, setApproved] = useState(false)
 
 
     useEffect(async () => {
-        setTvl(await vault.tvlPromise().then(r => web3.utils.fromWei(r.toString())))
-        setWallet(await farm.token.balanceOfPromise().then(r => web3.utils.fromWei(r.toString())))
-        setDeposited(await vault.depositedPromise().then(r => web3.utils.fromWei(r.toString())))
-        setApproved(await vault.isApprovedPromise().then(r => r))
+        const tvl = await vault.tvlPromise().then(r => web3.utils.fromWei(r.toString()))
+        const walletBalance = await farm.token.balanceOfPromise().then(r => web3.utils.fromWei(r.toString()))
+        const initialStake = await vault.depositedPromise().then(r => web3.utils.fromWei(r.toString()))
+        const isApproved = await vault.isApprovedPromise().then(r => r)
+        const currentStake = await vault.getPricePerFullSharePromise().then(r=>web3.utils.fromWei(r.toString())) * initialStake
+        const apr = null
+        const apy = null
+
+        setTvl(tvl)
+        setWallet(walletBalance)
+        setDeposited(initialStake)
+        setApproved(isApproved)
+        setCurrentStake(currentStake)
+        // setApr()
+        // setApy()
     })
 
     return <tr key={vaultKey} className={""}>
@@ -157,19 +172,20 @@ function VaultRow(props) {
         </td>
         <td>{farm.name}</td>
         <td>{farm.token.name}</td>
-        <td>#%</td>
-        <td>#%</td>
-        <td>{tvl}</td>
-        <td>{wallet}</td>
-        <td>{deposited}</td>
+        <td>{apr ? apr + "%" : <Skeleton/>}</td>
+        <td>{apy ? apy + "%" : <Skeleton/>}</td>
+        <td>{tvl ? parseFloat(tvl).toFixed(4) : <Skeleton/>}</td>
+        <td>{wallet ? parseFloat(wallet).toFixed(4) : <Skeleton />}</td>
+        <td>{deposited ? parseFloat(deposited).toFixed(4) : <Skeleton/>}</td>
+        <td>{currentStake ? parseFloat(currentStake).toFixed(4) : <Skeleton/>}</td>
         <td>
-            <button className="btn btn-sm btn-light"
+            <button className="btn btn-sm btn-primary"
                     onClick={async () => vault.strategy.contract.functions.harvest()}>
                 Compound
             </button>
         </td>
         <td>
-            <button className="btn btn-sm btn-light"
+            <button className="btn btn-sm btn-primary"
                     onClick={vault.withdrawAllPromise}>
                 Withdraw all
             </button>
@@ -177,7 +193,7 @@ function VaultRow(props) {
         { // Approval switch
             approved ? (
                 <td>
-                    <button className="btn btn-sm btn-light"
+                    <button className="btn btn-sm btn-primary"
                             onClick={vault.depositAllPromise}>
                         Deposit all
                     </button>

@@ -53,6 +53,11 @@ class Vault {
         return isApproved
     }
 
+
+    getPricePerFullSharePromise = async () => {
+        return this.contract.functions.getPricePerFullShare();
+    }
+
 }
 
 export default Vault;
