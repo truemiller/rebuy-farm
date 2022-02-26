@@ -1,5 +1,5 @@
 import logo from './logo.svg'
-import "../node_modules/bootswatch/dist/cosmo/bootstrap.css"
+import "~bootswatch/dist/cosmo/bootstrap.css"
 import {Fragment, useEffect, useState} from "react"
 import "./App.css"
 
