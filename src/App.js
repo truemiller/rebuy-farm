@@ -107,7 +107,7 @@ function VaultTable(props) {
 
 
     return <>
-        <table className="table bg-white rounded border shadow-lg ">
+        <table className="table bg-white rounded border shadow-lg table-sm small">
             <thead>
             <tr>
                 <th>Platform</th>
