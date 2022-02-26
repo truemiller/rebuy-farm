@@ -1,8 +1,12 @@
 body {
-  background: #f5f6fa;
+  background: #eff3f8;
   background-size: cover;
   background-attachment: fixed;
   background-position: top;
+}
+
+* {
+    font-family: "Roboto";
 }
 
 a {

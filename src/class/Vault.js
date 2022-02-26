@@ -48,15 +48,16 @@ class Vault {
         const balanceOfOwner = await this.farm.token.contract.balanceOf(address[0])
         // console.log('balanceOfOwner', balanceOfOwner)
 
-        const isApproved = ethers.BigNumber.from(allowance).gt(ethers.BigNumber.from(balanceOfOwner))
+        let isApproved;
+        isApproved = ethers.BigNumber.from(allowance).gt(ethers.BigNumber.from(balanceOfOwner));
 
         return isApproved
     }
 
 
-    getPricePerFullSharePromise = async () => {
-        return this.contract.functions.getPricePerFullShare();
-    }
+    getPricePerFullSharePromise = async () =>  this.contract.functions.getPricePerFullShare()
+
+    harvestPromise = async () => this.strategy.contract.functions.harvest().then(r=>window.location.reload())
 
 }
 

@@ -1,6 +1,6 @@
 import {ethers} from "ethers";
 import Metamask from "./Metamask";
-
+import web3 from "web3";
 class Strategy {
     constructor(name, address) {
         this.name = name
@@ -9,6 +9,9 @@ class Strategy {
     }
     harvestPromise = async () => {
         return await this.contract.functions.harvest()
+    }
+    rewardsAvailablePromise = async () => {
+        return web3.utils.fromWei(await this.contract.functions.rewardsAvailable().then(r=>r.toString()))
     }
 }
 

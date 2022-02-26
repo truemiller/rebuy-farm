@@ -10,7 +10,13 @@ export default class Exchange {
 
     getStableCoinPriceOf_Promise = async (address, stablecoinAddress = AVALANCHE.stablecoinAddress) => {
         const one = web3.utils.toWei("1")
-        const amountsOut = await this.router.functions.getAmountsOut(one.toString(), [address, stablecoinAddress]).then(r=>web3.utils.fromWei(r[0][1].toString(), "mwei"))
+        let amountsOut
+        try {
+            amountsOut = await this.router.functions.getAmountsOut(one.toString(), [address, stablecoinAddress]).then(r=>web3.utils.fromWei(ethers.BigNumber.from(r).toString(), "mwei"))
+        } catch (e)
+        {
+            amountsOut = 1
+        }
         return amountsOut
     }
 
@@ -18,4 +24,4 @@ export default class Exchange {
 
 }
 
-export const ElkFinance = new Exchange("ElkFinance", "0x9E4AAbd2B3E60Ee1322E94307d0776F2c8e6CFbb")
+export const ELKFINANCE = new Exchange("ElkFinance", "0x9E4AAbd2B3E60Ee1322E94307d0776F2c8e6CFbb")
