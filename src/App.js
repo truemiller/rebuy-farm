@@ -14,12 +14,11 @@ import Farm from "./class/Farm"
 import Platform from "./class/Platform"
 import Vault from "./class/Vault"
 import Strategy from "./class/Strategy"
-import Chain from "./class/Chain"
+import Chain, {AVALANCHE, POLYGON} from "./class/Chain"
 
 
 const chains = {
-    avax: new Chain("Avalanche", "0xa86a"),
-    matic: new Chain("Polygon", "0x89"),
+    avax: AVALANCHE,
 }
 
 const platforms = {
@@ -31,14 +30,14 @@ const chainIds = {
 }
 
 const tokens = {
-    elkWavax: new LP("ELKWAVAXLP", "0x2612dA8fc26Efbca3cC3F8fD543BCBa72b10aB59", null, null),
+    elkWavax: new LP(AVALANCHE, "ELKWAVAXLP", "0x2612dA8fc26Efbca3cC3F8fD543BCBa72b10aB59", null, null),
     // elkUsdte: new LP("ELKUSDTELP", "", ""),
     // elkPng: new LP("ELKPNGLP", "", ""),
     // elkDcau: new LP("ELKDCAULP", "", ""),
 }
 
 const farms = {
-    elkWavax: new Farm(chains.avax, "ELKWAVAX", "0x9ec3ca469F415a7e55A21Dc662D427d59e8De8F6", tokens.elkWavax, platforms.elk),
+    elkWavax: new Farm(AVALANCHE, "ELKWAVAX", "0x9ec3ca469F415a7e55A21Dc662D427d59e8De8F6", tokens.elkWavax, platforms.elk),
     // elkUsdte: new Farm("ELKUSDT", tokens.elkUsdte, platforms.elk),
     // elkPng: new Farm("ELKPNG", tokens.elkPng, platforms.elk),
     // elkDcau: new Farm("ELKDCAU", tokens.elkDcau, platforms.elk),
@@ -117,9 +116,11 @@ function VaultTable(props) {
                 <th>APR</th>
                 <th>APY</th>
                 <th>TVL</th>
+                <th>$</th>
                 <th>Wallet</th>
                 <th>Initial stake</th>
                 <th>Current stake</th>
+                <th>$</th>
             </tr>
             </thead>
             <tbody>
@@ -140,35 +141,50 @@ function VaultTable(props) {
 function VaultTableRow(props) {
     let vault = props.vault
     let farm = props.farm
+    let lp = farm.token
+
     let vaultKey = props.vaultKey
     let [accounts, setAccounts] = useState(props.accounts)
 
     let [tvl, setTvl] = useState()
+    let [tvlUSD, setTvlUSD] = useState()
     let [wallet, setWallet] = useState()
     let [deposited, setDeposited] = useState()
     let [currentStake, setCurrentStake] = useState()
     let [apr, setApr] = useState()
     let [apy, setApy] = useState()
+    let [currentStakeUSD, setCurrentStakeUSD] = useState()
 
     let [approved, setApproved] = useState(false)
 
 
     useEffect(async () => {
+        const lpUsdPerToken = await lp.usdPerToken()
         const tvl = await vault.tvlPromise().then(r => web3.utils.fromWei(r.toString()))
+        const tvlUSD = lpUsdPerToken * parseFloat(tvl)
         const walletBalance = await farm.token.balanceOfPromise().then(r => web3.utils.fromWei(r.toString()))
         const initialStake = await vault.depositedPromise().then(r => web3.utils.fromWei(r.toString()))
         const isApproved = await vault.isApprovedPromise().then(r => r)
         const currentStake = await vault.getPricePerFullSharePromise().then(r => web3.utils.fromWei(r.toString())) * initialStake
+        const currentStakedUSD = currentStake * lpUsdPerToken
         const apr = null
         const apy = null
 
         setTvl(tvl)
+        setTvlUSD(tvlUSD)
         setWallet(walletBalance)
         setDeposited(initialStake)
         setApproved(isApproved)
         setCurrentStake(currentStake)
+        setCurrentStakeUSD(currentStakedUSD)
         // setApr()
         // setApy()
+
+
+
+
+        console.log("lp.usdPerToken", await lp.usdPerToken())
+
     })
 
     return <tr key={vaultKey} className={""}>
@@ -181,9 +197,11 @@ function VaultTableRow(props) {
         <td>{apr ? apr + "%" : <Skeleton/>}</td>
         <td>{apy ? apy + "%" : <Skeleton/>}</td>
         <td>{tvl ? parseFloat(tvl).toFixed(4) : <Skeleton/>}</td>
+        <td>{tvlUSD ? parseFloat(tvlUSD).toFixed(4) : <Skeleton/>}</td>
         <td>{wallet ? parseFloat(wallet).toFixed(4) : <Skeleton/>}</td>
         <td>{deposited ? parseFloat(deposited).toFixed(4) : <Skeleton/>}</td>
         <td>{currentStake ? parseFloat(currentStake).toFixed(4) : <Skeleton/>}</td>
+        <td>{currentStakeUSD ? "$" + (parseFloat(currentStakeUSD).toFixed(2)) : <Skeleton/>}</td>
         <td>
             <button className="btn btn-sm btn-primary"
                     onClick={async () => vault.strategy.contract.functions.harvest()}>
@@ -193,7 +211,7 @@ function VaultTableRow(props) {
         <td>
             <button className="btn btn-sm btn-primary"
                     onClick={vault.withdrawAllPromise}>
-                Withdraw all
+                Withdraw
             </button>
         </td>
         { // Approval switch
@@ -201,7 +219,7 @@ function VaultTableRow(props) {
                 <td>
                     <button className="btn btn-sm btn-primary"
                             onClick={vault.depositAllPromise}>
-                        Deposit all
+                        Deposit
                     </button>
                 </td>
             ) : (

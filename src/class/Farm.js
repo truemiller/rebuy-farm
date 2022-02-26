@@ -12,14 +12,7 @@ class Farm {
         this.contract = new ethers.Contract(this.address, "[]", Metamask.signer)
     }
 
-    static rewardUsdValuePerToken = () => {
-        const rewardTokenAddress = this.token.contract.functions.rewardToken().then(r => r)
-        const rewardTokenContract = new ethers.Contract("", "", Metamask.signer)
-    }
 
-    static apr = () => {
-
-    }
 
 }
 
