@@ -32,32 +32,33 @@ const chainIds = {
 const tokens = {
     elk: new Token("Elk", "", "https://4126527139-files.gitbook.io/~/files/v0/b/gitbook-28427.appspot.com/o/assets%2F-MW_PNk7A0t0ux_cdlkt%2F-MiWHF5mPB0N_QTE7e-j%2F-MiWHWQjSbekcPtPUdwV%2FElkLogo%20512x512.svg?alt=media&token=27da238a-7b85-4ea8-b1f0-8a67aeaf2049"),
     wavax: new Token("Wrapped Avalanche", "", "https://assets.coingecko.com/coins/images/15075/large/wrapped-avax.png?1629873618"),
-    usdte: new Token("USDT.e", "", "https://cryptologos.cc/logos/tether-usdt-logo.png")
+    usdte: new Token("USDT.e", "", "https://cryptologos.cc/logos/tether-usdt-logo.png"),
+    usdce: new Token("USDC.e", "", "https://cryptologos.cc/logos/usd-coin-usdc-logo.png")
     // elkPng: new LP("ELKPNGLP", "", ""),
     // elkDcau: new LP("ELKDCAULP", "", ""),
 }
 
 const lps = {
     elkWavax: new LP(AVALANCHE, "ELK/WAVAX LP", "0x2612dA8fc26Efbca3cC3F8fD543BCBa72b10aB59", tokens.elk, tokens.wavax),
-    elkUsdte: new LP(AVALANCHE, "ELK/USDTE LP", "0x1AEb1DeF5B064Df8e4470E57Af17dF72961A9eF8", tokens.elk, tokens.usdte),
+    elkUsdce: new LP(AVALANCHE, "ELK/USCTE LP", "0xd185c562306cb257a53c6b9d7287ebed9b1bb410", tokens.elk, tokens.usdce),
 }
 
 const farms = {
     elkWavax: new Farm(AVALANCHE, "ELKWAVAX", "0x9ec3ca469F415a7e55A21Dc662D427d59e8De8F6", lps.elkWavax, platforms.elk),
-    elkUsdte: new Farm(AVALANCHE, "ELKUSDT", "0x482dCc1B2477D44aF818d7A9b0d1F545356CB58a", lps.elkUsdte, platforms.elk),
+    elkUsdce: new Farm(AVALANCHE, "ELKUSDC", "0xe935028DF3285D1852E11dAe384534d27887c196", lps.elkUsdce, platforms.elk),
     // elkPng: new Farm("ELKPNG", tokens.elkPng, platforms.elk),
     // elkDcau: new Farm("ELKDCAU", tokens.elkDcau, platforms.elk),
 }
 
 const strategies = {
     elkWavax: new Strategy("ELKWAVAX", "0xb90cFF851899C56f10Da6125EE790004e3eeC426"),
-    elkUsdte: new Strategy("ELKUSDTE", "0xEa96C07006Aff00A0BE84f0C552292dca01882Eb")
+    elkUsdce: new Strategy("ELKUSDCE", "0x72eADD8BBE9d3076e7F108641bB92b3b8078D96D")
 }
 
 
 const vaults = {
-    elkUsdte: new Vault(chains.avax, platforms.elk, farms.elkUsdte, "0x7dBB985fcEEaBd99A513D09C7BA8703434aBd93A", strategies.elkUsdte),
     elkWavax: new Vault(chains.avax, platforms.elk, farms.elkWavax, "0xd1b524ee1d1278b4770c5d6c97Cf70D3F73358a6", strategies.elkWavax),
+    elkUsdce: new Vault(chains.avax, platforms.elk, farms.elkUsdce, "0x91590A3733F80f7646264B03738e810815Ba30eC", strategies.elkUsdce),
     // elkPolygon: new Vault(chains.matic, platforms.elk, farms.elkWavax, "0xd1b524ee1d1278b4770c5d6c97Cf70D3F73358a6", strategies.elkWavax)
 }
 
