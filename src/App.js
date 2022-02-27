@@ -1,6 +1,6 @@
 import logo from './logo.svg'
-import "~bootswatch/dist/cosmo/bootstrap.css"
 import {Fragment, useEffect, useState} from "react"
+import "../node_modules/bootstrap/dist/css/bootstrap.css"
 import "./App.css"
 
 import Skeleton from 'react-loading-skeleton'
