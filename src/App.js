@@ -1,7 +1,7 @@
 import logo from './logo.svg'
 import {Fragment, useEffect, useState} from "react"
-import "../node_modules/bootswatch/dist/united/bootstrap.css"
-import "./App.css"
+import "./css/bootstrap.css"
+import "./css/App.css"
 
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -207,12 +207,12 @@ function VaultTableRow(props) {
 
                 { // Approval switch
                     approved ? (
-                        <button className="btn btn-sm btn-primary"
+                        <button className="btn btn-sm btn-dark"
                                 onClick={vault.depositAllPromise}>
                             Deposit
                         </button>
                     ) : (
-                        <button className="btn btn-sm"
+                        <button className="btn btn-sm btn-outline-light"
                                 onClick={vault.approvePromise}>
                             Approve
                         </button>
