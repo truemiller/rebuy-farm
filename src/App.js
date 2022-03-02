@@ -64,9 +64,13 @@ function Navbar(props) {
     let accounts = props.accounts;
 
 
-    return <nav className="navbar navbar-light bg-white shadow-sm">
-        <div className="container">
-            <a href="#" className="navbar-brand fw-bolder">Rebuy Farm</a>
+    return <nav className="navbar navbar-light bg-white shadow-lg border">
+        <div className="container ">
+            <div className="d-flex align-self-start">
+                <a href="/" className="navbar-brand fw-bolder">Rebuy Farm</a>
+                <a href="//t.me/rebuyfarm" className="nav-link">Telegram</a>
+                <a href="//twitter.com/rebuyfarm" className="nav-link">Twitter</a>
+            </div>
             <div className={"d-flex"}>
                 <div className="btn ">{chainIds[chainId]}</div>
                 <div className="btn ">{accounts ?? "None"}</div>
@@ -79,7 +83,7 @@ function VaultTable(props) {
     const accounts = props.accounts ?? []
     const chainId = props.chainId ?? null
     const isConnected = accounts.length > 0
-    const vaultArray = Object.keys(vaults).map(vaultKey=>vaults[vaultKey])
+    const vaultArray = Object.keys(vaults).map(vaultKey => vaults[vaultKey])
 
     return <div className={"row"}>
         {vaultArray.map(vault => {
@@ -87,8 +91,7 @@ function VaultTable(props) {
             const vaultChainId = vault.chain.chainId
             return vaultChainId === chainId ? (
                 <div className={"col-xl-3 col-lg-4 col-md-6 mb-3"} key={vault.address}>
-                    <VaultTableRow vault={vault} farm={farm}
-                                   accounts={accounts}/>
+                    <VaultTableRow vault={vault} farm={farm} accounts={accounts}/>
                 </div>
             ) : null
         })}
@@ -118,6 +121,11 @@ function VaultTableRow(props) {
 
 
     useEffect(async () => {
+
+        const apr = await farm?.aprPromise()?.then(r => r)
+        setApr(apr)
+        const apy = (((1 + (apr / 100 / 365)) ** 365) - 1) * 100
+        setApy(apy)
         const tvl = await vault.tvlPromise().then(r => web3.utils.fromWei(r.toString()))
         setTvl(tvl)
         let lpUsdPerToken = 0
@@ -126,33 +134,29 @@ function VaultTableRow(props) {
         } catch (e) {
 
         }
+        const rewards = await vault.strategy.rewardsAvailablePromise().then(r => r)
         const tvlUSD = parseFloat(lpUsdPerToken) * parseFloat(tvl)
         setTvlUSD(tvlUSD)
         const walletBalance = await farm.token.balanceOfPromise().then(r => web3.utils.fromWei(r.toString()))
+        setWallet(walletBalance)
         const initialStake = await vault.depositedPromise().then(r => web3.utils.fromWei(r.toString()))
+        setDeposited(initialStake)
         const isApproved = await vault.isApprovedPromise().then(r => r)
         const currentStake = await vault.getPricePerFullSharePromise().then(r => web3.utils.fromWei(r.toString())) * initialStake
-        const currentStakedUSD = currentStake * lpUsdPerToken
-        const apr = await farm?.aprPromise()?.then(r => r)
-        const apy = (((1 + (apr / 100 / 365)) ** 365) - 1) * 100
-        const rewards = await vault.strategy.rewardsAvailablePromise().then(r => r)
-
-
-        setWallet(walletBalance)
-        setDeposited(initialStake)
-        setApproved(isApproved)
         setCurrentStake(currentStake)
+        const currentStakedUSD = currentStake * lpUsdPerToken
         setCurrentStakeUSD(currentStakedUSD)
         setRewards(rewards)
-        setApr(apr)
-        setApy(apy)
+
+
+        setApproved(isApproved)
         // } catch (e) {
         //
         // }
     }, [])
 
-    return <div key={vaultKey} className="card">
-        <div className="card-body shadow-lg">
+    return <div key={vaultKey} className={"card border shadow-lg"}>
+        <div className={"card-body"}>
             <div className={"fw-bolder text-center"}>
                 <h2 className={"fw-bolder"}>Elk Finance</h2>
                 {farm.name}
@@ -190,11 +194,11 @@ function VaultTableRow(props) {
                     <th>Wallet Balance</th>
                     <td>{wallet ? parseFloat(wallet).toPrecision(4) : <Skeleton/>}</td>
                 </tr>
-                <tr>
-                    <th>Deposited</th>
-                    <td>{deposited ? parseFloat(deposited).toFixed(4) :
-                        <Skeleton/>}</td>
-                </tr>
+                {/*<tr>*/}
+                {/*    <th>Deposited</th>*/}
+                {/*    <td>{deposited ? parseFloat(deposited).toFixed(4) :*/}
+                {/*        <Skeleton/>}</td>*/}
+                {/*</tr>*/}
                 <tr>
 
                     <th>Current stake</th>
@@ -206,7 +210,7 @@ function VaultTableRow(props) {
                     <td>{currentStakeUSD ? (parseFloat(currentStakeUSD).toFixed(0)) : <Skeleton/>}</td>
                 </tr>
                 <tr>
-                    <th>Rewards</th>
+                    <th>Awaiting compound</th>
                     <td>{rewards ? (parseFloat(rewards).toPrecision(4)) : <Skeleton/>}</td>
                 </tr>
                 </tbody>

@@ -6,8 +6,9 @@ import {ELKFINANCE} from "./Exchange";
 import web3 from "web3";
 
 class LP extends Token {
-    constructor(chain, name, address, token0, token1) {
+    constructor(chain, name, address, token0, token1, exchange) {
         super(name, address);
+        this.exchange=exchange
         this.token0=token0
         this.token1=token1
         this.chain=chain

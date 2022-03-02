@@ -5,7 +5,8 @@ import {AVALANCHE} from "./Chain";
 import {ELKFINANCE} from "./Exchange";
 
 class Farm {
-    constructor(chain, name, address, token, platform) {
+    constructor(chain, name, address, token, platform, exchange) {
+        this.exchange=exchange
         this.chain = chain;
         this.name = name;
         this.address = address;
@@ -27,7 +28,7 @@ class Farm {
 
         // calc price of yearly emissions
         const rewardTokenAddress = await this.contract.functions.rewardsToken().then(r=>r[0]);
-        const priceOfRewardToken = await ELKFINANCE.getStableCoinPriceOf_Promise(rewardTokenAddress);
+        const priceOfRewardToken = await this.exchange.getStableCoinPriceOf_Promise(rewardTokenAddress);
         const priceOfYearlyEmissions = priceOfRewardToken * emissionsPerYear
         // get total staked (tvl)
         const priceOfLP = await this.token.usdPerToken()
