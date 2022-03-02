@@ -54,9 +54,9 @@ export const strategies = {
 }
 
 export const vaults = {
-    elkWavax: new Vault(chains.avax, platforms.elk, farms.elkWavax, "0xd1b524ee1d1278b4770c5d6c97Cf70D3F73358a6", strategies.elkWavax),
-    elkUsdce: new Vault(chains.avax, platforms.elk, farms.elkUsdce, "0x91590A3733F80f7646264B03738e810815Ba30eC", strategies.elkUsdce),
-    elkTeddy: new Vault(chains.avax, platforms.elk, farms.elkTeddy, "0x5aEd6C2c6d85C9013EeB189D6B393f4898d1ba55", strategies.elkTeddy),
+    elkWavax: new Vault(chains.avax, platforms.elk, farms.elkWavax, "0xd1b524ee1d1278b4770c5d6c97Cf70D3F73358a6", strategies.elkWavax, "This vault claims impermanent loss protection."),
+    elkUsdce: new Vault(chains.avax, platforms.elk, farms.elkUsdce, "0x91590A3733F80f7646264B03738e810815Ba30eC", strategies.elkUsdce, "This vault claims impermanent loss protection."),
+    elkTeddy: new Vault(chains.avax, platforms.elk, farms.elkTeddy, "0x5aEd6C2c6d85C9013EeB189D6B393f4898d1ba55", strategies.elkTeddy, "This vault claims impermanent loss protection."),
     // elkPolygon: new Vault(chains.matic, platforms.elk, farms.elkWavax, "0xd1b524ee1d1278b4770c5d6c97Cf70D3F73358a6", strategies.elkWavax)
 }
 

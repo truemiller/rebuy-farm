@@ -8,18 +8,12 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import web3 from "web3"
 
 import Metamask from "./class/Metamask"
-import Token from "./class/Token"
-import LP from "./class/LP"
-import Farm from "./class/Farm"
-import Platform from "./class/Platform"
-import Vault from "./class/Vault"
-import Strategy from "./class/Strategy"
-import Chain, {AVALANCHE, POLYGON} from "./class/Chain"
 import {chainIds, vaults} from "./constants";
 
 function App() {
     const [chainId, setChainId] = useState("")
     const [accounts, setAccounts] = useState([])
+    const [query, setQuery] = useState("")
 
     useEffect(async () => {
         setAccounts(await Metamask.address())
@@ -36,7 +30,8 @@ function App() {
                 <div className="container mt-3">
                     <h1 className={"fw-bolder text-light"}>Rebuy Farm</h1>
                     <p className={" text-white-50"}>The cross chain yield optimizer</p>
-                    <VaultTable accounts={accounts} chainId={chainId}/>
+                    <input type="text" className="form-control mb-3" placeholder={"Search"} onChange={event=>setQuery(event.target.value)}/>
+                    <VaultTable accounts={accounts} chainId={chainId} query={query}/>
                 </div>
             </Fragment>
             :
@@ -82,8 +77,21 @@ function Navbar(props) {
 function VaultTable(props) {
     const accounts = props.accounts ?? []
     const chainId = props.chainId ?? null
+    const query = props.query
     const isConnected = accounts.length > 0
-    const vaultArray = Object.keys(vaults).map(vaultKey => vaults[vaultKey]).filter(vault=>vault.chain.chainId === chainId)
+    const vaultArray = Object.keys(vaults).map(vaultKey => vaults[vaultKey])
+        .filter(vault=>vault.chain.chainId === chainId)
+        .filter(vault=>{
+            const lowerCaseQuery = query.toLowerCase()
+            const platformName = vault.platform.name.toLowerCase()
+            const strategyName = vault.strategy.name.toLowerCase()
+            const farmName = vault.farm.name.toLowerCase()
+            const exchangeName = vault.farm.exchange.name.toLowerCase()
+            return platformName.includes(lowerCaseQuery) ||
+                strategyName.includes(lowerCaseQuery) ||
+                farmName.includes(lowerCaseQuery) ||
+                exchangeName.includes(lowerCaseQuery)
+        })
 
     return <div className={"row"}>
         {
@@ -100,11 +108,11 @@ function VaultTable(props) {
                 :
                 <>
                     <div className="alert alert-danger" role="alert">
-                        There aren't any farms on this chain, try <a href="#" onClick={()=>
+                        There aren't any farms! Try using <a href="#" onClick={()=>
                         window?.ethereum?.request({
                             method: 'wallet_switchEthereumChain',
                             params: [{chainId: '0xa86a'}], // chainId must be in hexadecimal numbers})
-                        })}>Avalanche</a>.
+                        })}>Avalanche</a> or update your search query.
                     </div>
                 </>
         }
@@ -134,8 +142,10 @@ function VaultTableRow(props) {
 
 
     useEffect(async () => {
+        const isApproved =  await vault.isApprovedPromise()
+        setApproved(isApproved)
 
-        const apr = await farm?.aprPromise()?.then(r => r)
+        const apr = await farm?.aprPromise()
         setApr(apr)
         const apy = (((1 + (apr / 100 / 365)) ** 365) - 1) * 100
         setApy(apy)
@@ -154,7 +164,6 @@ function VaultTableRow(props) {
         setWallet(walletBalance)
         const initialStake = await vault.depositedPromise().then(r => web3.utils.fromWei(r.toString()))
         setDeposited(initialStake)
-        const isApproved = await vault.isApprovedPromise().then(r => r)
         const currentStake = await vault.getPricePerFullSharePromise().then(r => web3.utils.fromWei(r.toString())) * initialStake
         setCurrentStake(currentStake)
         const currentStakedUSD = currentStake * lpUsdPerToken
@@ -162,16 +171,14 @@ function VaultTableRow(props) {
         setRewards(rewards)
 
 
-        setApproved(isApproved)
-        // } catch (e) {
-        //
-        // }
     }, [])
+
+    console.log(vault.note)
 
     return <div key={vaultKey} className={"card border shadow-lg"}>
         <div className={"card-body"}>
             <div className={"fw-bolder text-center"}>
-                <h2 className={"fw-bolder"}>Elk Finance</h2>
+                <h2 className={"fw-bolder"}>{farm.exchange.name}</h2>
                 {farm.name}
                 <div className={"mb-3"}>
                     <img loading={"lazy"} src={farm.token.token0.image}
@@ -183,6 +190,7 @@ function VaultTableRow(props) {
                          title={farm.platform.name}
                          height={24} width={24}/>
                 </div>
+                {vault.note ? <div className={"alert alert-info"}>{vault.note}</div> : null }
             </div>
             <table className={"table table-sm table-bordered"}>
                 <tbody>

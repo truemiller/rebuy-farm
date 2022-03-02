@@ -6,7 +6,7 @@ import {ELKFINANCE} from "./Exchange";
 
 class Farm {
     constructor(chain, name, address, token, platform, exchange) {
-        this.exchange=exchange
+        this.exchange = exchange
         this.chain = chain;
         this.name = name;
         this.address = address;
