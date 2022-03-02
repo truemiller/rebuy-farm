@@ -30,7 +30,7 @@ function App() {
     window.ethereum.on("chainChanged", () => window.location.reload())
 
     return (
-        accounts && chainId === "0xa86a" ?
+        accounts && chainId ?
             <Fragment>
                 <Navbar chainId={chainId} accounts={accounts}/>
                 <div className="container mt-3">
@@ -83,18 +83,31 @@ function VaultTable(props) {
     const accounts = props.accounts ?? []
     const chainId = props.chainId ?? null
     const isConnected = accounts.length > 0
-    const vaultArray = Object.keys(vaults).map(vaultKey => vaults[vaultKey])
+    const vaultArray = Object.keys(vaults).map(vaultKey => vaults[vaultKey]).filter(vault=>vault.chain.chainId === chainId)
 
     return <div className={"row"}>
-        {vaultArray.map(vault => {
-            const farm = vault.farm
-            const vaultChainId = vault.chain.chainId
-            return vaultChainId === chainId ? (
-                <div className={"col-xl-3 col-lg-4 col-md-6 mb-3"} key={vault.address}>
-                    <VaultTableRow vault={vault} farm={farm} accounts={accounts}/>
-                </div>
-            ) : null
-        })}
+        {
+            vaultArray.length > 0 ?
+            vaultArray.map(vault => {
+                const farm = vault.farm
+                const vaultChainId = vault.chain.chainId
+                return vaultChainId === chainId ? (
+                    <div className={"col-xl-3 col-lg-4 col-md-6 mb-3"} key={vault.address}>
+                        <VaultTableRow vault={vault} farm={farm} accounts={accounts}/>
+                    </div>
+                ) : null
+            })
+                :
+                <>
+                    <div className="alert alert-danger" role="alert">
+                        There aren't any farms on this chain, try <a href="#" onClick={()=>
+                        window?.ethereum?.request({
+                            method: 'wallet_switchEthereumChain',
+                            params: [{chainId: '0xa86a'}], // chainId must be in hexadecimal numbers})
+                        })}>Avalanche</a>.
+                    </div>
+                </>
+        }
     </div>
 
 }
