@@ -30,21 +30,28 @@ function App() {
     window.ethereum.on("chainChanged", () => window.location.reload())
 
     return (
-        accounts && chainId ?
-        <Fragment>
-            <Navbar chainId={chainId} accounts={accounts}/>
-            <div className="container mt-3">
-                <h1 className={"fw-bolder text-light"}>Rebuy Farm</h1>
-                <p className={" text-white-50"}>The cross chain yield optimizer</p>
-                <VaultTable accounts={accounts} chainId={chainId}/>
-            </div>
-        </Fragment>
+        accounts && chainId === "0xa86a" ?
+            <Fragment>
+                <Navbar chainId={chainId} accounts={accounts}/>
+                <div className="container mt-3">
+                    <h1 className={"fw-bolder text-light"}>Rebuy Farm</h1>
+                    <p className={" text-white-50"}>The cross chain yield optimizer</p>
+                    <VaultTable accounts={accounts} chainId={chainId}/>
+                </div>
+            </Fragment>
             :
             <>
                 <div className={"d-flex vw-100 vh-100 align-items-center justify-content-center"}>
                     <div className="card">
                         <div className="card-body">
-                            <a href="#" className="btn btn-primary" onClick={()=>window?.ethereum?.request({method: 'eth_requestAccounts'})}>Connect to metamask</a>
+                            <a href="#" className="btn btn-primary" onClick={() => {
+                                window?.ethereum?.request({method: 'eth_requestAccounts'})
+                                window?.ethereum?.request({
+                                    method: 'wallet_switchEthereumChain',
+                                    params: [{chainId: '0xa86a'}], // chainId must be in hexadecimal numbers})
+                                })
+                            }
+                            }>Connect to Avalanche wallet</a>
                         </div>
                     </div>
                 </div>
@@ -130,7 +137,6 @@ function VaultTableRow(props) {
         const apr = await farm?.aprPromise()?.then(r => r)
         const apy = (((1 + (apr / 100 / 365)) ** 365) - 1) * 100
         const rewards = await vault.strategy.rewardsAvailablePromise().then(r => r)
-
 
 
         setWallet(walletBalance)
