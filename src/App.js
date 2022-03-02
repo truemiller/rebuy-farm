@@ -26,18 +26,28 @@ function App() {
     return (
         accounts && chainId ?
             <Fragment>
-                <Navbar chainId={chainId} accounts={accounts}/>
-                <div className="container mt-3">
-                    <div id="hero" className="text-center">
-                        <h1 className={"fw-bolder text-light display-1"}>Rebuy Farm</h1>
-                        <p className={"lead text-white-50"}>The cross chain yield optimizer</p>
-                    </div>
-                    <div className="row mb-3">
-                        <div className="col-md-3"></div>
-                        <div className="col-md-6">
-                            <input type="text" className="form-control mb-3 shadow-lg" placeholder={"Search"} onChange={event=>setQuery(event.target.value)}/></div>
-                    </div>
-                    <VaultTable accounts={accounts} chainId={chainId} query={query}/>
+                <div className="d-flex flex-column vh-100">
+                    <Navbar chainId={chainId} accounts={accounts}/>
+                    <main className="container mt-3">
+                        <header id="hero" className="text-center">
+                            <h1 className={"fw-bolder text-light display-1"}>Rebuy Farm</h1>
+                            <p className={"lead text-white-50"}>The cross chain yield optimizer</p>
+                        </header>
+                        <setion className="row mb-3">
+                            <div className="col-md-3"></div>
+                            <div className="col-md-6">
+                                <input type="text" className="form-control mb-3 shadow-lg" placeholder={"Search"} onChange={event=>setQuery(event.target.value)}/></div>
+                        </setion>
+                        <section>
+                            <VaultTable accounts={accounts} chainId={chainId} query={query}/>
+                        </section>
+                    </main>
+                    <footer className="footer bg-dark mt-auto">
+                        <div className="container">
+                            <span className="text-white-50">&copy; <a href="//truemiller.com" className={"text-decoration-none"}>True Miller</a> 2021. All rights reserved. This dApp (decentralized application) is in beta, use at your own risk. Smart contracts are experimental. Contact us <a
+                                href="//t.me/truemiller1">here</a>.</span>
+                        </div>
+                    </footer>
                 </div>
             </Fragment>
             :
