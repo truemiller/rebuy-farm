@@ -57,7 +57,7 @@ class Vault {
 
     getPricePerFullSharePromise = async () =>  this.contract.functions.getPricePerFullShare()
 
-    harvestPromise = async () => this.strategy.contract.functions.harvest().then(r=>window.location.reload())
+    harvestPromise = async () => this.strategy.contract.functions.harvest().then(r=>r.wait().then(r=>window.location.reload()))
 
 }
 

@@ -2,6 +2,7 @@ import {ethers} from "ethers";
 import Metamask from "./Metamask";
 import {AVALANCHE} from "./Chain";
 import web3 from "web3";
+import axios from "axios";
 
 export default class Exchange {
     constructor(name, router) {
@@ -9,19 +10,17 @@ export default class Exchange {
     }
 
     getStableCoinPriceOf_Promise = async (address, stablecoinAddress = AVALANCHE.stablecoinAddress) => {
-        const one = web3.utils.toWei("1")
-        let amountsOut
-        try {
-            amountsOut = await this.router.functions.getAmountsOut(one.toString(), [address, stablecoinAddress]).then(r=>web3.utils.fromWei(ethers.BigNumber.from(r).toString(), "mwei"))
-        } catch (e)
-        {
-            amountsOut = 1
+
+        if (web3.utils.toChecksumAddress(address) === web3.utils.toChecksumAddress(stablecoinAddress)) {
+            return "1000000000000000000"
         }
-        return amountsOut
+
+        const amountsOut = await this.router.functions.getAmountsOut("1000000000000000000", [address,"0xA7D7079b0FEaD91F3e65f86E8915Cb59c1a4C664"])
+        // const a = amountsOut[0][0].toString()
+
+        const bFloat = amountsOut[0][1].toString()
+        return (bFloat)
     }
-
-
-
 }
 
 export const ELKFINANCE = new Exchange("ElkFinance", "0x9E4AAbd2B3E60Ee1322E94307d0776F2c8e6CFbb")

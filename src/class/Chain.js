@@ -6,4 +6,4 @@ export default class Chain {
     }
 }
 
-export const AVALANCHE = new Chain("Avalanche", "0xa86a", "0xc7198437980c041c805a1edcba50c1ce5db95118")
+export const AVALANCHE = new Chain("Avalanche", "0xa86a", "0xA7D7079b0FEaD91F3e65f86E8915Cb59c1a4C664")

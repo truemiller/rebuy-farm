@@ -1,4 +1,4 @@
-import {ethers} from "ethers";
+import {BigNumber, ethers} from "ethers";
 import Metamask from "./Metamask";
 import web3 from "web3";
 import {AVALANCHE} from "./Chain";
@@ -15,7 +15,6 @@ class Farm {
     }
 
     aprPromise = async () => {
-        // get the emissions
         const emissions = await this.contract.functions.rewardRate().then(r=>r.toString())
         //calculate yearly emissions
         const emissionsGwei = web3.utils.fromWei(emissions)
@@ -37,8 +36,7 @@ class Farm {
         const priceOfPool = balanceOfPool * priceOfLP
         // apr
         const apr = priceOfYearlyEmissions / priceOfPool
-        console.log("apr", apr, priceOfYearlyEmissions, priceOfPool, balanceOfPool, priceOfYearlyEmissions)
-        return apr / 0.02
+        return apr / 100 / 100
     }
 
 

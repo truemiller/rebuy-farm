@@ -1,12 +1,11 @@
 body {
-  background: #eff3f8;
+  background: url(https://linuxconfig.org/wp-content/uploads/2020/03/Focal-Fossa_Plain_WP_1920x1080.png);
   background-size: cover;
   background-attachment: fixed;
   background-position: top;
 }
 
 * {
-    font-family: "Roboto";
 }
 
 a {
