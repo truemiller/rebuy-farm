@@ -268,7 +268,7 @@ function VaultTableRow(props) {
                             Deposit
                         </button>
                     ) : (
-                        <button className="btn btn-sm btn-outline-light"
+                        <button className="btn btn-sm btn-danger"
                                 onClick={vault.approvePromise}>
                             Approve
                         </button>
