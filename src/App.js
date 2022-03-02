@@ -79,16 +79,15 @@ function VaultTable(props) {
     const accounts = props.accounts ?? []
     const chainId = props.chainId ?? null
     const isConnected = accounts.length > 0
-
+    const vaultArray = Object.keys(vaults).map(vaultKey=>vaults[vaultKey])
 
     return <div className={"row"}>
-        {Object.keys(vaults).map((vaultKey) => {
-            const vault = vaults[vaultKey]
+        {vaultArray.map(vault => {
             const farm = vault.farm
             const vaultChainId = vault.chain.chainId
             return vaultChainId === chainId ? (
-                <div className={"col-xl-3 col-lg-4 col-md-6 mb-3"}>
-                    <VaultTableRow vault={vault} farm={farm} vaultKey={vaultKey} key={vaultKey}
+                <div className={"col-xl-3 col-lg-4 col-md-6 mb-3"} key={vault.address}>
+                    <VaultTableRow vault={vault} farm={farm}
                                    accounts={accounts}/>
                 </div>
             ) : null
