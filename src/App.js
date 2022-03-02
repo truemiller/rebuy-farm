@@ -30,6 +30,7 @@ function App() {
     window.ethereum.on("chainChanged", () => window.location.reload())
 
     return (
+        accounts && chainId ?
         <Fragment>
             <Navbar chainId={chainId} accounts={accounts}/>
             <div className="container mt-3">
@@ -38,6 +39,16 @@ function App() {
                 <VaultTable accounts={accounts} chainId={chainId}/>
             </div>
         </Fragment>
+            :
+            <>
+                <div className={"d-flex vw-100 vh-100 align-items-center justify-content-center"}>
+                    <div className="card">
+                        <div className="card-body">
+                            <a href="#" className="btn btn-primary" onClick={()=>window?.ethereum?.request({method: 'eth_requestAccounts'})}>Connect to metamask</a>
+                        </div>
+                    </div>
+                </div>
+            </>
     );
 }
 
