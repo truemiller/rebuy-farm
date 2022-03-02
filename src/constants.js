@@ -20,7 +20,7 @@ export const chainIds = {
 }
 
 export const exchanges = {
-    elk: new Exchange("Elk Finance","0x9E4AAbd2B3E60Ee1322E94307d0776F2c8e6CFbb"),
+    elk: new Exchange("Elk Finance","0x9E4AAbd2B3E60Ee1322E94307d0776F2c8e6CFbb", "//elk.finance"),
 }
 
 export const tokens = {

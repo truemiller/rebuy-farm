@@ -28,9 +28,15 @@ function App() {
             <Fragment>
                 <Navbar chainId={chainId} accounts={accounts}/>
                 <div className="container mt-3">
-                    <h1 className={"fw-bolder text-light"}>Rebuy Farm</h1>
-                    <p className={" text-white-50"}>The cross chain yield optimizer</p>
-                    <input type="text" className="form-control mb-3" placeholder={"Search"} onChange={event=>setQuery(event.target.value)}/>
+                    <div id="hero" className="text-center">
+                        <h1 className={"fw-bolder text-light display-1"}>Rebuy Farm</h1>
+                        <p className={"lead text-white-50"}>The cross chain yield optimizer</p>
+                    </div>
+                    <div className="row mb-3">
+                        <div className="col-md-3"></div>
+                        <div className="col-md-6">
+                            <input type="text" className="form-control mb-3 shadow-lg" placeholder={"Search"} onChange={event=>setQuery(event.target.value)}/></div>
+                    </div>
                     <VaultTable accounts={accounts} chainId={chainId} query={query}/>
                 </div>
             </Fragment>
@@ -59,12 +65,12 @@ function Navbar(props) {
     let accounts = props.accounts;
 
 
-    return <nav className="navbar navbar-light bg-white shadow-lg border">
-        <div className="container ">
+    return <nav className="navbar navbar-dark bg-gradient shadow">
+        <div className="container">
             <div className="d-flex align-self-start">
                 <a href="/" className="navbar-brand fw-bolder">Rebuy Farm</a>
-                <a href="//t.me/rebuyfarm" className="nav-link">Telegram</a>
-                <a href="//twitter.com/rebuyfarm" className="nav-link">Twitter</a>
+                <a href="//t.me/rebuyfarm" className="nav-link text-white">Telegram</a>
+                <a href="//twitter.com/rebuyfarm" className="nav-link text-white">Twitter</a>
             </div>
             <div className={"d-flex"}>
                 <div className="btn ">{chainIds[chainId]}</div>
@@ -178,7 +184,7 @@ function VaultTableRow(props) {
     return <div key={vaultKey} className={"card border shadow-lg"}>
         <div className={"card-body"}>
             <div className={"fw-bolder text-center"}>
-                <h2 className={"fw-bolder"}>{farm.exchange.name}</h2>
+                <h2 className={"fw-bolder"}><a className={"text-decoration-none"} href={farm.exchange.url}>{farm.exchange.name}</a></h2>
                 {farm.name}
                 <div className={"mb-3"}>
                     <img loading={"lazy"} src={farm.token.token0.image}
