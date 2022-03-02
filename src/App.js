@@ -73,8 +73,7 @@ function Navbar(props) {
                 <a href="//twitter.com/rebuyfarm" className="nav-link text-white">Twitter</a>
             </div>
             <div className={"d-flex"}>
-                <div className="btn ">{chainIds[chainId]}</div>
-                <div className="btn ">{accounts ?? "None"}</div>
+                <a href={""} className="nav-link text-white">{accounts && chainIds[chainId]? `Connected to ${chainIds[chainId]}` : "Not connected"}</a>
             </div>
         </div>
     </nav>
@@ -106,7 +105,7 @@ function VaultTable(props) {
                 const farm = vault.farm
                 const vaultChainId = vault.chain.chainId
                 return vaultChainId === chainId ? (
-                    <div className={"col-xl-3 col-lg-4 col-md-6 mb-3"} key={vault.address}>
+                    <div className={"col-xl-4 col-lg-4 col-md-6 mb-3"} key={vault.address}>
                         <VaultTableRow vault={vault} farm={farm} accounts={accounts}/>
                     </div>
                 ) : null
