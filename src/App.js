@@ -147,10 +147,10 @@ function VaultTableRow(props) {
     let [tvlUSD, setTvlUSD] = useState(0)
     let [wallet, setWallet] = useState(0)
     let [deposited, setDeposited] = useState(0)
-    let [currentStake, setCurrentStake] = useState(0)
+    let [currentStake, setCurrentStake] = useState("0")
     let [apr, setApr] = useState(0)
     let [apy, setApy] = useState(0)
-    let [currentStakeUSD, setCurrentStakeUSD] = useState(0)
+    let [currentStakeUSD, setCurrentStakeUSD] = useState("0")
     let [rewards, setRewards] = useState(0)
 
     let [approved, setApproved] = useState(false)
@@ -166,12 +166,8 @@ function VaultTableRow(props) {
         setApy(apy)
         const tvl = await vault.tvlPromise().then(r => web3.utils.fromWei(r.toString()))
         setTvl(tvl)
-        let lpUsdPerToken = 0
-        try {
-            lpUsdPerToken = await lp.usdPerToken()
-        } catch (e) {
+        let lpUsdPerToken = await lp.usdPerToken()
 
-        }
         const rewards = await vault.strategy.rewardsAvailablePromise().then(r => r)
         const tvlUSD = parseFloat(lpUsdPerToken) * parseFloat(tvl)
         setTvlUSD(tvlUSD)
@@ -188,8 +184,6 @@ function VaultTableRow(props) {
 
     }, [])
 
-    console.log(vault.note)
-
     return <div key={vaultKey} className={"card border shadow-lg"}>
         <div className={"card-body"}>
             <div className={"fw-bolder text-center"}>
@@ -199,11 +193,12 @@ function VaultTableRow(props) {
                     <img loading={"lazy"} src={farm.token.token0.image}
                          alt={farm.platform.name + " logo"}
                          title={farm.platform.name} height={24} width={24}/>
-                    <img loading={"lazy"}
-                         src={farm.token.token1.image}
-                         alt={farm.platform.name + " logo"}
-                         title={farm.platform.name}
-                         height={24} width={24}/>
+                    {!farm.token.isSingle ?
+                        <img loading={"lazy"}
+                             src={farm.token.token1.image}
+                             alt={farm.platform.name + " logo"}
+                             title={farm.platform.name}
+                             height={24} width={24}/> : null }
                 </div>
                 {vault.note ? <div className={"alert alert-info"}>{vault.note}</div> : null }
             </div>

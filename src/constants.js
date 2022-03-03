@@ -34,15 +34,17 @@ export const tokens = {
 }
 
 export const lps = {
-    elkWavax: new LP(chains.avax, "ELK/WAVAX LP", "0x2612dA8fc26Efbca3cC3F8fD543BCBa72b10aB59", tokens.elk, tokens.wavax),
-    elkUsdce: new LP(chains.avax, "ELK/USDCE LP", "0xd185c562306cb257a53c6b9d7287ebed9b1bb410", tokens.elk, tokens.usdce),
-    elkTeddy: new LP(chains.avax, "ELK/TEDDY LP", "0xe01f050b99424053a65822628da79c896f3263bd", tokens.elk, tokens.teddy),
+    elkWavax: new LP(chains.avax, "ELK/WAVAX LP", "0x2612dA8fc26Efbca3cC3F8fD543BCBa72b10aB59", tokens.elk, tokens.wavax, exchanges.elk, false),
+    elkUsdce: new LP(chains.avax, "ELK/USDCE LP", "0xd185c562306cb257a53c6b9d7287ebed9b1bb410", tokens.elk, tokens.usdce, exchanges.elk, false),
+    elkTeddy: new LP(chains.avax, "ELK/TEDDY LP", "0xe01f050b99424053a65822628da79c896f3263bd", tokens.elk, tokens.teddy, exchanges.elk, false),
+    elkElk: new LP(chains.avax, "ELK/ELK LP", "0xE1C110E1B1b4A1deD0cAf3E42BfBdbB7b5d7cE1C", tokens.elk, tokens.elk, exchanges.elk, true)
 }
 
 export const farms = {
     elkWavax: new Farm(chains.avax, "ELKWAVAX", "0x9ec3ca469F415a7e55A21Dc662D427d59e8De8F6", lps.elkWavax, platforms.elk, exchanges.elk),
     elkUsdce: new Farm(chains.avax, "ELKUSDC", "0xe935028DF3285D1852E11dAe384534d27887c196", lps.elkUsdce, platforms.elk, exchanges.elk),
     elkTeddy: new Farm(chains.avax, "ELKTEDDY", "0x51e07fF9C0F78F88b3c094a71d338d1681C3ad20", lps.elkTeddy, platforms.elk, exchanges.elk),
+    elkElk: new Farm(chains.avax, "ELK SINGLE", "0xB105D4D17a09397960f2678526A4063A64FAd9bd", lps.elkElk, platforms.elk, exchanges.elk)
     // elkPng: new Farm("ELKPNG", tokens.elkPng, platforms.elk),
     // elkDcau: new Farm("ELKDCAU", tokens.elkDcau, platforms.elk),
 }
@@ -51,12 +53,14 @@ export const strategies = {
     elkWavax: new Strategy(chains.avax,"ELKWAVAX", "0xb90cFF851899C56f10Da6125EE790004e3eeC426", exchanges.elk),
     elkUsdce: new Strategy(chains.avax,"ELKUSDCE", "0x72eADD8BBE9d3076e7F108641bB92b3b8078D96D", exchanges.elk),
     elkTeddy: new Strategy(chains.avax,"ELKTEDDY", "0xE920C406CbB5C277d6508F52a07E3849E0b9Ffde", exchanges.elk),
+    elkElk: new Strategy(chains.avax,"ELKELK", "0xaDe4ABb9bca47Fe28d095Ad7Ed7ce4f1Cc3496a4", exchanges.elk),
 }
 
 export const vaults = {
     elkWavax: new Vault(chains.avax, platforms.elk, farms.elkWavax, "0xd1b524ee1d1278b4770c5d6c97Cf70D3F73358a6", strategies.elkWavax, "This vault claims impermanent loss protection."),
     elkUsdce: new Vault(chains.avax, platforms.elk, farms.elkUsdce, "0x91590A3733F80f7646264B03738e810815Ba30eC", strategies.elkUsdce, "This vault claims impermanent loss protection."),
     elkTeddy: new Vault(chains.avax, platforms.elk, farms.elkTeddy, "0x5aEd6C2c6d85C9013EeB189D6B393f4898d1ba55", strategies.elkTeddy, "This vault claims impermanent loss protection and dual rewards."),
+    elkElk: new Vault(chains.avax, platforms.elk, farms.elkElk, "0x33CC0b0Fc80aB6e25BBAf9E0c8a0d87E32c8a18A", strategies.elkElk, "This vault charges upto 5% for withdrawals."),
     // elkPolygon: new Vault(chains.matic, platforms.elk, farms.elkWavax, "0xd1b524ee1d1278b4770c5d6c97Cf70D3F73358a6", strategies.elkWavax)
 }
 

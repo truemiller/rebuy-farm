@@ -17,6 +17,7 @@ class Farm {
 
     aprPromise = async () => {
         const emissions = await this.contract.functions.rewardRate().then(r=>r.toString())
+
         //calculate yearly emissions
         const emissionsGwei = web3.utils.fromWei(emissions)
         const blockRate = 1
@@ -25,16 +26,17 @@ class Farm {
         const emissionsPerHour=emissionsPerMinute*60
         const emissionsPerDay=emissionsPerHour*24
         const emissionsPerYear=emissionsPerDay*365
-
         // calc price of yearly emissions
         const rewardTokenAddress = await this.contract.functions.rewardsToken().then(r=>r[0]);
         const priceOfRewardToken = await this.exchange.getStableCoinPriceOf_Promise(rewardTokenAddress);
         const priceOfYearlyEmissions = priceOfRewardToken * emissionsPerYear
         // get total staked (tvl)
         const priceOfLP = await this.token.usdPerToken()
+        console.log(this.name, this.token.isSingle)
         const balanceOfPoolWei = await this.token.contract.balanceOf(this.address).then(r=>r.toString())
         const balanceOfPool = web3.utils.fromWei(balanceOfPoolWei)
         const priceOfPool = balanceOfPool * priceOfLP
+        console.log(this.name)
         // apr
         const apr = priceOfYearlyEmissions / priceOfPool
         return apr / 100 / 100
