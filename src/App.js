@@ -42,7 +42,7 @@ function App() {
                             <VaultTable accounts={accounts} chainId={chainId} query={query}/>
                         </section>
                     </main>
-                    <footer className="footer bg-dark mt-auto">
+                    <footer className="footer bg-gradient mt-auto">
                         <div className="container">
                             <span className="text-white-50">&copy; <a href="//truemiller.com" className={"text-decoration-none"}>True Miller</a> 2021. All rights reserved. This dApp (decentralized application) is in beta, use at your own risk. Smart contracts are experimental. Contact us <a
                                 href="//t.me/truemiller1">here</a>.</span>
@@ -120,7 +120,7 @@ function VaultTable(props) {
                 const farm = vault.farm
                 const vaultChainId = vault.chain.chainId
                 return vaultChainId === chainId ? (
-                    <div className={"col-xl-4 col-lg-4 col-md-6 mb-3"} key={vault.address}>
+                    <div className={"col-xl-3 col-lg-4 col-md-6 mb-3"} key={vault.address}>
                         <VaultTableRow vault={vault} farm={farm} accounts={accounts}/>
                     </div>
                 ) : null
@@ -148,15 +148,15 @@ function VaultTableRow(props) {
     let vaultKey = props.vaultKey
     let [accounts, setAccounts] = useState(props.accounts)
 
-    let [tvl, setTvl] = useState(0)
-    let [tvlUSD, setTvlUSD] = useState(0)
-    let [wallet, setWallet] = useState(0)
-    let [deposited, setDeposited] = useState(0)
-    let [currentStake, setCurrentStake] = useState("0")
-    let [apr, setApr] = useState(0)
-    let [apy, setApy] = useState(0)
-    let [currentStakeUSD, setCurrentStakeUSD] = useState("0")
-    let [rewards, setRewards] = useState(0)
+    let [tvl, setTvl] = useState(null)
+    let [tvlUSD, setTvlUSD] = useState(null)
+    let [wallet, setWallet] = useState(null)
+    let [deposited, setDeposited] = useState(null)
+    let [currentStake, setCurrentStake] = useState(null)
+    let [apr, setApr] = useState(null)
+    let [apy, setApy] = useState(null)
+    let [currentStakeUSD, setCurrentStakeUSD] = useState(null)
+    let [rewards, setRewards] = useState(null)
 
     let [approved, setApproved] = useState(false)
 
@@ -189,8 +189,8 @@ function VaultTableRow(props) {
 
     }, [])
 
-    return <div key={vaultKey} className={"card border shadow-lg"}>
-        <div className={"card-body"}>
+    return <div key={vaultKey} className={"card border  shadow-lg"}>
+        <div className={"card-body "}>
             <div className={"fw-bolder text-center"}>
                 <h2 className={"fw-bolder"}><a className={"text-decoration-none"} href={farm.exchange.url}>{farm.exchange.name}</a></h2>
                 {farm.name}
@@ -211,24 +211,24 @@ function VaultTableRow(props) {
                 <tbody>
                 <tr>
                     <th>APR</th>
-                    <td>{apr ? parseFloat(apr).toFixed(4) : <Skeleton/>}</td>
+                    <td>{apr != null ? parseFloat(apr).toFixed(4) : <Skeleton/>}</td>
                 </tr>
                 <tr>
                     <th>APY</th>
-                    <td>{apy ? parseFloat(apy).toFixed(4) : <Skeleton/>}</td>
+                    <td>{apy != null ? parseFloat(apy).toFixed(4) : <Skeleton/>}</td>
                 </tr>
 
                 <tr>
                     <th>TVL</th>
-                    <td>{tvl ? parseFloat(tvl).toFixed(4) : <Skeleton/>}</td>
+                    <td>{tvl != null ? parseFloat(tvl).toFixed(4) : <Skeleton/>}</td>
                 </tr>
                 <tr>
                     <th>TVL ($)</th>
-                    <td>{tvlUSD ? parseFloat(tvlUSD).toFixed(0) : <Skeleton/>}</td>
+                    <td>{tvlUSD != null ? parseFloat(tvlUSD).toFixed(0) : <Skeleton/>}</td>
                 </tr>
                 <tr>
                     <th>Wallet Balance</th>
-                    <td>{wallet ? parseFloat(wallet).toPrecision(4) : <Skeleton/>}</td>
+                    <td>{wallet != null ? parseFloat(wallet).toPrecision(4) : <Skeleton/>}</td>
                 </tr>
                 {/*<tr>*/}
                 {/*    <th>Deposited</th>*/}
@@ -238,16 +238,16 @@ function VaultTableRow(props) {
                 <tr>
 
                     <th>Current stake</th>
-                    <td>{currentStake ? parseFloat(currentStake).toFixed(4) :
+                    <td>{currentStake != null ? parseFloat(currentStake).toFixed(4) :
                         <Skeleton/>}</td>
                 </tr>
                 <tr>
                     <th>Current stake ($)</th>
-                    <td>{currentStakeUSD ? (parseFloat(currentStakeUSD).toFixed(0)) : <Skeleton/>}</td>
+                    <td>{currentStakeUSD != null ? (parseFloat(currentStakeUSD).toFixed(0)) : <Skeleton/>}</td>
                 </tr>
                 <tr>
                     <th>Awaiting compound</th>
-                    <td>{rewards ? (parseFloat(rewards).toPrecision(4)) : <Skeleton/>}</td>
+                    <td>{rewards != null ? (parseFloat(rewards).toPrecision(4)) : <Skeleton/>}</td>
                 </tr>
                 </tbody>
             </table>

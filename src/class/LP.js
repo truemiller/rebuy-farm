@@ -55,9 +55,8 @@ class LP extends Token {
             const singleTokenPrice = totalLPValuation / parseFloat(lpTotalSupply)
             return singleTokenPrice / 1000000
             } else {
-                console.log("ELSE")
                 const singlePrice = await this.exchange.getStableCoinPriceOf_Promise(this.address) / 1000000
-                console.log('singlePrice', singlePrice)
+
                 return singlePrice
             }
 

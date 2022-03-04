@@ -33,11 +33,9 @@ class Farm {
         const priceOfYearlyEmissions = priceOfRewardToken * emissionsPerYear
         // get total staked (tvl)
         const priceOfLP = await this.token.usdPerToken()
-        console.log(this.name, this.token.isSingle)
         const balanceOfPoolWei = await this.token.contract.balanceOf(this.address).then(r=>r.toString())
         const balanceOfPool = web3.utils.fromWei(balanceOfPoolWei)
         const priceOfPool = balanceOfPool * priceOfLP
-        console.log(this.name)
         // apr
         const apr = priceOfYearlyEmissions / priceOfPool
         return apr / 100 / 100
