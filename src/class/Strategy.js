@@ -11,8 +11,10 @@ class Strategy {
         this.contract = new ethers.Contract(address, strategyAbi, this.chain.defaultProvider())
     }
 
+    signerContract = () => new ethers.Contract(this.address, strategyAbi, Metamask.signer)
+
     harvestPromise = async () => {
-        return await this.contract.functions.harvest()
+        return new ethers.Contract(this.address, strategyAbi, Metamask.signer()).functions.harvest()
     }
     rewardsAvailablePromise = async () => {
         return web3.utils.fromWei(await this.contract.functions.rewardsAvailable().then(r => r.toString()))

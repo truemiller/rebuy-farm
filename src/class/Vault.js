@@ -15,6 +15,8 @@ class Vault {
         this.strategy = strategy;
     }
 
+    signerContract = () => new ethers.Contract(this.address, vaultAbi, Metamask.signer)
+
     tvlPromise = async () => this.contract.functions.balance()
 
     depositedPromise = async () => {
@@ -22,7 +24,7 @@ class Vault {
         return this.contract?.functions?.balanceOf(`${address[0]}`)
     }
 
-    withdrawAllPromise = async () => this.contract.functions.withdrawAll()
+    withdrawAllPromise = async () => this.signerContract().functions.withdrawAll()
 
     depositAllPromise = async () => {
         const address = await Metamask.address()
@@ -30,13 +32,13 @@ class Vault {
 
         // approve contract to spend lp
         if ( await this.isApprovedPromise ){
-            await this.contract.functions.deposit(balance.toString())
+            await new ethers.Contract(this.address, vaultAbi, Metamask.signer).functions.deposit(balance.toString())
         }
         //
     }
 
     approvePromise = async () => {
-        return this.farm.token.contract.approve(this.address, ethers.constants.MaxUint256)
+        return this.farm.token.signerContract().approve(this.address, ethers.constants.MaxUint256)
     }
 
     isApprovedPromise = async () => {
@@ -55,7 +57,7 @@ class Vault {
 
     getPricePerFullSharePromise = async () =>  this.contract.functions.getPricePerFullShare()
 
-    harvestPromise = async () => this.strategy.contract.functions.harvest().then(r=>r.wait().then(r=>window.location.reload()))
+    harvestPromise = async () => this.strategy.signerContract().functions.harvest().then(r=>r.wait().then(r=>window.location.reload()))
 
 }
 

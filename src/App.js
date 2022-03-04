@@ -52,7 +52,12 @@ function App() {
             </Fragment>
             :
             <>
-                <div className={"d-flex vw-100 vh-100 align-items-center justify-content-center"}>
+                    <Navbar/>
+                <header id="hero" className="text-center">
+                    <h1 className={"fw-bolder text-light display-1"}>Rebuy Farm</h1>
+                    <p className={"lead text-white-50"}>The cross chain yield optimizer</p>
+                </header>
+                <div className={"d-flex align-items-center justify-content-center"}>
                     <div className="card">
                         <div className="card-body">
                             <a href="#" className="btn btn-primary" onClick={() => {
@@ -62,7 +67,7 @@ function App() {
                                     params: [{chainId: '0xa86a'}], // chainId must be in hexadecimal numbers})
                                 })
                             }
-                            }>Connect to Avalanche wallet</a>
+                            }>Connect to Metamask</a>
                         </div>
                     </div>
                 </div>

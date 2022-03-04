@@ -16,6 +16,10 @@ class LP extends Token {
         this.contract = new ethers.Contract(address, lpAbi, chain.defaultProvider())
     }
 
+    signerContract = () => {
+        return new ethers.Contract(this.address, lpAbi, Metamask.signer)
+    }
+
     balanceOfPromise = async () => {
         const address = await Metamask.address()
         const balance = this.contract?.functions?.balanceOf(`${address[0]}`)
