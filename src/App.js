@@ -8,7 +8,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import web3 from "web3"
 
 import Metamask from "./class/Metamask"
-import {chainIds, vaults} from "./constants";
+import {chainIds, vaults} from "./constants/constants";
 
 function App() {
     const [chainId, setChainId] = useState("")
@@ -33,11 +33,11 @@ function App() {
                             <h1 className={"fw-bolder text-light display-1"}>Rebuy Farm</h1>
                             <p className={"lead text-white-50"}>The cross chain yield optimizer</p>
                         </header>
-                        <setion className="row mb-3">
+                        <section className="row mb-3">
                             <div className="col-md-3"></div>
                             <div className="col-md-6">
                                 <input type="text" className="form-control mb-3 shadow-lg" placeholder={"Search"} onChange={event=>setQuery(event.target.value)}/></div>
-                        </setion>
+                        </section>
                         <section>
                             <VaultTable accounts={accounts} chainId={chainId} query={query}/>
                         </section>

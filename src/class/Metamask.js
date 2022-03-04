@@ -1,4 +1,6 @@
 import {ethers} from "ethers";
+import {AVALANCHE} from "./Chain";
+import {chains} from "../constants/constants";
 
 class Metamask {
     ethereum;

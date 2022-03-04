@@ -1,9 +1,16 @@
+import web3 from "web3";
+import {ethers} from "ethers";
+
 export default class Chain {
-    constructor(name, chainId, stablecoinAddress) {
+    constructor(name, chainId, stablecoinAddress, provider, blocktime) {
         this.name=name;
         this.chainId=chainId;
         this.stablecoinAddress=stablecoinAddress;
+        this.provider = provider
+        this.blocktime = blocktime
     }
+
+    defaultProvider = () => new ethers.providers.JsonRpcProvider(this.provider);
 }
 
-export const AVALANCHE = new Chain("Avalanche", "0xa86a", "0xA7D7079b0FEaD91F3e65f86E8915Cb59c1a4C664")
+
