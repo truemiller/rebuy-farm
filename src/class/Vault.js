@@ -28,10 +28,10 @@ class Vault {
 
     depositAllPromise = async () => {
         const address = await Metamask.address()
-        const balance = await this.farm.token.contract?.functions?.balanceOf(`${address[0]}`)
 
         // approve contract to spend lp
         if ( await this.isApprovedPromise ){
+            const balance = await this.farm.token.contract?.functions?.balanceOf(`${address[0]}`)
             await new ethers.Contract(this.address, vaultAbi, Metamask.signer).functions.deposit(balance.toString())
         }
         //
@@ -44,9 +44,7 @@ class Vault {
     isApprovedPromise = async () => {
         const address = await Metamask.address()
         const allowance = await this.farm.token.contract.allowance(address[0], this.address)
-        // console.log('allowance', allowance)
         const balanceOfOwner = await this.farm.token.contract.balanceOf(address[0])
-        // console.log('balanceOfOwner', balanceOfOwner)
 
         let isApproved;
         isApproved = ethers.BigNumber.from(allowance).gt(ethers.BigNumber.from(balanceOfOwner));

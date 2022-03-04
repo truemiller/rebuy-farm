@@ -292,7 +292,7 @@ function VaultTableRow(props) {
                         <div className="col-md-4 d-flex flex-column">
                             <h3>Pending</h3>
                             <span className={"mb-3"}>
-                                <strong>Rewards</strong>: {0}
+                                <strong>Rewards</strong>: {rewards ? rewards : <Skeleton/>}
                             </span>
                             <button className="btn btn-lg btn-success"
                                     onClick={async () => vault.harvestPromise()}>
