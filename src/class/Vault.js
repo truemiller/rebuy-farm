@@ -17,7 +17,9 @@ class Vault {
 
     signerContract = () => new ethers.Contract(this.address, vaultAbi, Metamask.signer)
 
-    tvlPromise = async () => this.contract.functions.balance()
+    tvlPromise = async () => {
+        return this.contract?.functions?.balance()
+    }
 
     depositedPromise = async () => {
         const address = await Metamask.address()

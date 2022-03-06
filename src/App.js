@@ -34,20 +34,23 @@ function App() {
                             <p className={"lead text-white-50"}>The cross chain yield optimizer</p>
                         </header>
                         <section className="row mb-3">
-                            <div className="col-md-3"></div>
+                            <div className="col-md-3"/>
                             <div className="col-md-6">
                                 <input type="text" className="form-control mb-3 shadow-lg" placeholder={"Search"}
-                                       onChange={event => setQuery(event.target.value)}/></div>
+                                       onChange={event => setQuery(event.target.value)}/>
+                            </div>
                         </section>
                         <section>
                             <VaultTable accounts={accounts} chainId={chainId} query={query}/>
                         </section>
                     </main>
                     <footer className="footer bg-gradient mt-auto">
-                        <div className="container">
+                        <div className="navbar">
+                            <div className="container">
                             <span className="text-white-50">&copy; <a href="//truemiller.com"
                                                                       className={"text-decoration-none"}>True Miller</a> 2021. All rights reserved. This dApp (decentralized application) is in beta, use at your own risk. Smart contracts are experimental. Contact us <a
                                 href="//t.me/truemiller1">here</a>.</span>
+                            </div>
                         </div>
                     </footer>
                 </div>
@@ -80,8 +83,6 @@ function App() {
 function Navbar(props) {
     let chainId = props.chainId;
     let accounts = props.accounts;
-
-
     return <nav className="navbar navbar-dark bg-gradient shadow">
         <div className="container">
             <div className="d-flex align-self-start">
@@ -101,7 +102,6 @@ function VaultTable(props) {
     const accounts = props.accounts ?? []
     const chainId = props.chainId ?? null
     const query = props.query
-    const isConnected = accounts.length > 0
     const vaultArray = Object.keys(vaults).map(vaultKey => vaults[vaultKey])
         .filter(vault => vault.chain.chainId === chainId)
         .filter(vault => {
@@ -151,17 +151,17 @@ function VaultTableRow(props) {
     let vaultKey = props.vaultKey
     let [accounts, setAccounts] = useState(props.accounts)
 
-    let [lpUsd, setLpUsd] = useState(null)
-    let [tvl, setTvl] = useState(null)
-    let [tvlUSD, setTvlUSD] = useState(null)
-    let [wallet, setWallet] = useState(null)
-    let [walletUsd, setWalletUsd] = useState(null)
-    let [deposited, setDeposited] = useState(null)
-    let [currentStake, setCurrentStake] = useState(null)
-    let [apr, setApr] = useState(null)
-    let [apy, setApy] = useState(null)
-    let [currentStakeUSD, setCurrentStakeUSD] = useState(null)
-    let [rewards, setRewards] = useState(null)
+    let [lpUsd, setLpUsd] = useState(0)
+    let [tvl, setTvl] = useState(0)
+    let [tvlUSD, setTvlUSD] = useState(0)
+    let [wallet, setWallet] = useState(0)
+    let [walletUsd, setWalletUsd] = useState(0)
+    let [deposited, setDeposited] = useState(0)
+    let [currentStake, setCurrentStake] = useState(0)
+    let [apr, setApr] = useState(0)
+    let [apy, setApy] = useState(0)
+    let [currentStakeUSD, setCurrentStakeUSD] = useState(0)
+    let [rewards, setRewards] = useState(0)
 
     let [expanded, setExpanded] = useState(false)
     let [approved, setApproved] = useState(false)
@@ -170,34 +170,35 @@ function VaultTableRow(props) {
     useEffect(async () => {
 
         // const apr = await farm?.aprPromise()
-        // const tvl = await vault.tvlPromise().then(r => web3.utils.fromWei(r.toString()))
+        // let tvl = await vault?.tvlPromise()
+        // setTvl(web3.utils.fromWei(tvl.toString()))
+        // debugger
         // let lpUsdPerToken = await lp.usdPerToken()
         //
         // const walletBalance = await farm.token.balanceOfPromise().then(r => web3.utils.fromWei(r.toString()))
         // const initialStake = await vault.depositedPromise().then(r => web3.utils.fromWei(r.toString()))
+        // // const currentStake = await vault.getPricePerFullSharePromise().then(r => web3.utils.fromWei(r.toString())) * initialStake
+
+        const [apr, tvl, lpUsdPerToken, walletBalance, initialStake] = await Promise.all([
+            farm?.aprPromise(), //apr
+            vault.tvlPromise(),
+            lp.usdPerToken(), //usdpertoken
+            farm.token.balanceOfPromise(),
+            vault.depositedPromise(),
+        ])
+        const apy = (((1 + (apr / 100 / 365)) ** 365) - 1) * 100
+
         // const currentStake = await vault.getPricePerFullSharePromise().then(r => web3.utils.fromWei(r.toString())) * initialStake
 
-        const [apr,tvl,lpUsdPerToken,walletBalance,initialStake] = await Promise.all([
-            farm?.aprPromise(), //apr
-            vault.tvlPromise().then(r => web3.utils.fromWei(r.toString())), //tvl
-            lp.usdPerToken(), //usdpertoken
-            farm.token.balanceOfPromise().then(r => web3.utils.fromWei(r.toString())),
-            vault.depositedPromise().then(r => web3.utils.fromWei(r.toString()))
-        ])
-
-        const currentStake = await vault.getPricePerFullSharePromise().then(r => web3.utils.fromWei(r.toString())) * initialStake
-
-        const apy = (((1 + (apr / 100 / 365)) ** 365) - 1) * 100
-        const tvlUSD = parseFloat(lpUsdPerToken) * parseFloat(tvl)
+        const tvlUSD = parseFloat(lpUsdPerToken) * parseFloat(web3.utils.fromWei(`${tvl}`))
         const currentStakedUSD = currentStake * lpUsdPerToken
-
         setApr(apr)
         setApy(apy)
-        setTvl(tvl)
+        setTvl(web3.utils.fromWei(`${tvl}`))
         setLpUsd(lpUsdPerToken)
         setTvlUSD(tvlUSD)
-        setWallet(walletBalance)
-        setDeposited(parseFloat(initialStake))
+        setWallet(web3.utils.fromWei(`${walletBalance}`))
+        setDeposited(web3.utils.fromWei(`${initialStake}`))
         setCurrentStake(currentStake)
         setCurrentStakeUSD(currentStakedUSD)
 
@@ -224,19 +225,21 @@ function VaultTableRow(props) {
                          src={farm.token.token1.image}
                          alt={farm.platform.name + " logo"}
                          title={farm.platform.name}
+                         className={"rounded-circle"}
                          height={24} width={24}/> : null}
             </div>
             <div className="d-flex flex-column align-self-start">
                 <strong>{farm.name}</strong>
-                <strong className={"fw-bolder d-inline-block"}><a className={"text-decoration-none text-truncate"}
-                                                                  href={farm.exchange.url}>{farm.exchange.name}</a></strong>
+                <strong className={"fw-bolder d-inline-block"}>
+                    <a className={"text-decoration-none text-truncate"}
+                       href={farm.exchange.url}>{farm.exchange.name}</a></strong>
             </div>
             <div className="d-flex flex-column text-center">
                 {wallet ? wallet : <Skeleton/>}
                 <strong>Balance</strong>
             </div>
             <div className="d-flex flex-column text-center">
-                {currentStake != null ? currentStake.toFixed(4) : <Skeleton/>}
+                {deposited}
                 <strong>Deposited</strong>
             </div>
             <div className="d-flex flex-column text-center">
@@ -282,7 +285,7 @@ function VaultTableRow(props) {
                         <div className="col-md-4 d-flex flex-column">
                             <h3>Vault</h3>
                             <span className={"mb-3"}>
-                            <strong>Deposited</strong>: {currentStake ? currentStake.toFixed(4) : 0} (${currentStakeUSD ? currentStakeUSD.toFixed(4): 0})
+                            <strong>Deposited</strong>: {currentStake != null ? currentStake.toFixed(4) : 0} (${currentStakeUSD ? currentStakeUSD.toFixed(4) : 0})
                             </span>
                             <button className="btn btn-lg btn-dark"
                                     onClick={vault.withdrawAllPromise}>
