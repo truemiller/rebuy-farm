@@ -24,7 +24,7 @@ function App() {
     window.ethereum.on("chainChanged", () => window.location.reload())
 
     return (
-        accounts && chainId ?
+        // accounts && chainId ?
             <Fragment>
                 <div className="d-flex flex-column vh-100">
                     <Navbar chainId={chainId} accounts={accounts}/>
@@ -51,38 +51,42 @@ function App() {
                                                                       className={"text-decoration-none"}>True Miller</a> 2021. All rights reserved. This dApp (decentralized application) is in beta, use at your own risk. Smart contracts are experimental. Contact us <a
                                 href="//t.me/truemiller1">here</a>.</span>
                             </div>
+
                         </div>
                     </footer>
                 </div>
             </Fragment>
-            :
-            <>
-                <Navbar/>
-                <header id="hero" className="text-center">
-                    <h1 className={"fw-bolder text-light display-1"}>Rebuy Farm</h1>
-                    <p className={"lead text-white-50"}>The cross chain yield optimizer</p>
-                </header>
-                <div className={"d-flex align-items-center justify-content-center"}>
-                    <div className="card">
-                        <div className="card-body">
-                            <a href="#" className="btn btn-primary" onClick={() => {
-                                window?.ethereum?.request({method: 'eth_requestAccounts'})
-                                window?.ethereum?.request({
-                                    method: 'wallet_switchEthereumChain',
-                                    params: [{chainId: '0xa86a'}], // chainId must be in hexadecimal numbers})
-                                })
-                            }
-                            }>Connect to Metamask</a>
-                        </div>
-                    </div>
-                </div>
-            </>
+            // :
+            // <>
+            //     <Navbar/>
+            //     <header id="hero" className="text-center">
+            //         <h1 className={"fw-bolder text-light display-1"}>Rebuy Farm</h1>
+            //         <p className={"lead text-white-50"}>The cross chain yield optimizer</p>
+            //     </header>
+            //     <div className={"d-flex align-items-center justify-content-center"}>
+            //         <div className="card">
+            //             <div className="card-body">
+            //                 <a href="#" className="btn btn-primary" onClick={() => {
+            //                     window?.ethereum?.request({method: 'eth_requestAccounts'})
+            //                     window?.ethereum?.request({
+            //                         method: 'wallet_switchEthereumChain',
+            //                         params: [{chainId: '0xa86a'}], // chainId must be in hexadecimal numbers})
+            //                     })
+            //                 }
+            //                 }>Connect to Metamask</a>
+            //             </div>
+            //         </div>
+            //     </div>
+            // </>
     );
 }
 
 function Navbar(props) {
     let chainId = props.chainId;
     let accounts = props.accounts;
+
+    const [dropdown, setDropdown] = useState(false)
+
     return <nav className="navbar navbar-dark bg-gradient shadow">
         <div className="container">
             <div className="d-flex align-self-start">
@@ -91,8 +95,8 @@ function Navbar(props) {
                 <a href="//twitter.com/rebuyfarm" className="nav-link text-white">Twitter</a>
             </div>
             <div className={"d-flex"}>
-                <a href={""}
-                   className="nav-link text-white">{accounts && chainIds[chainId] ? `Connected to ${chainIds[chainId]}` : "Not connected"}</a>
+                <a href={"#"}
+                   className="nav-link text-white" onClick={()=>window.ethereum.request({method: 'eth_requestAccounts'})}>{accounts && chainIds[chainId] ? `Connected to ${chainIds[chainId]}` : "Not connected"}</a>
             </div>
         </div>
     </nav>

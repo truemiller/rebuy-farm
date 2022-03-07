@@ -1,9 +1,6 @@
-import {BigNumber, ethers} from "ethers";
-import Metamask from "./Metamask";
-import web3 from "web3";
-import {AVALANCHE} from "./Chain";
-import {ELKFINANCE} from "./Exchange";
-import {rewardPoolAbi} from "../constants/abis";
+import {BigNumber, ethers} from "ethers"
+import web3 from "web3"
+import {rewardPoolAbi} from "../constants/abis"
 
 class Farm {
     constructor(chain, name, address, token, platform, exchange) {
