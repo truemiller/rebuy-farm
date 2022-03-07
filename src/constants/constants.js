@@ -82,6 +82,6 @@ export const vaults = {
     elkElk: new Vault(chains.avax, platforms.elk, farms.elkElk, "0x33CC0b0Fc80aB6e25BBAf9E0c8a0d87E32c8a18A", strategies.elkElk, "This vault charges upto 5% for withdrawals."),
     maticElkElk: new Vault(chains.matic, platforms.elk, farms.maticElkElk, "0x53d199b5bbe51563f116FDF58b2a3d12d51008d7", strategies.maticElkElk, "This vault charges upto 5% for withdrawals."),
     maticElkMatic: new Vault(chains.matic, platforms.elk, farms.maticElkMatic, "0xfe786197D8deb678900D7687c704021A2A9340Fc", strategies.maticElkMatic, "This vault charges upto 5% for withdrawals."),
-    elkPolygon: new Vault(chains.matic, platforms.elk, farms.elkWavax, "0xd1b524ee1d1278b4770c5d6c97Cf70D3F73358a6", strategies.elkWavax)
+    // elkPolygon: new Vault(chains.matic, platforms.elk, farms.elkWavax, "0xd1b524ee1d1278b4770c5d6c97Cf70D3F73358a6", strategies.elkWavax)
 }
 

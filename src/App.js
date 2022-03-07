@@ -235,11 +235,11 @@ function VaultTableRow(props) {
                        href={farm.exchange.url}>{farm.exchange.name}</a></strong>
             </div>
             <div className="d-flex flex-column text-center">
-                {wallet ? wallet : <Skeleton/>}
+                {parseFloat(wallet).toFixed(4)}
                 <strong>Balance</strong>
             </div>
             <div className="d-flex flex-column text-center">
-                {deposited}
+                {parseFloat(deposited).toFixed(4)}
                 <strong>Deposited</strong>
             </div>
             <div className="d-flex flex-column text-center">
