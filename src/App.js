@@ -73,11 +73,13 @@ function App() {
 
 function Footer(props) {
     return <footer className="footer bg-gradient mt-auto border-top shadow-sm">
-        <div className="container d-flex">
-            <a href="//t.me/rebuyfarm" className="nav-link "><i className={"fab fa-telegram"}/>Telegram</a>
-            <a href="//twitter.com/rebuyfarm" className="nav-link ">Twitter</a>
+        <div className="navbar bg-light">
+            <div className="container d-flex justify-content-start">
+                <a href="//t.me/rebuyfarm" className="nav-link "><i className={"fab fa-telegram"}/>Telegram</a>
+                <a href="//twitter.com/rebuyfarm" className="nav-link ">Twitter</a>
+            </div>
         </div>
-        <div className="navbar">
+        <div className="navbar bg-light navbar-dark">
             <div className="container">
              <span className="">&copy; <a href="//truemiller.com" className={"text-decoration-none"}>True Miller</a> 2021. All rights reserved. This dApp (decentralized application) is in beta, use at your own risk. Smart contracts are experimental. Contact us <a
                  href="//t.me/truemiller1">here</a>.</span>
@@ -195,7 +197,7 @@ function VaultTableRow(props) {
             farm.token.balanceOfPromise(),
             vault.depositedPromise(),
         ])
-        const apy = (((1 + (apr / 100 / 365)) ** 365) - 1) * 100
+        const apy = farm.apy(apr)
 
         // const currentStake = await vault.getPricePerFullSharePromise().then(r => web3.utils.fromWei(r.toString())) * initialStake
 
@@ -265,7 +267,7 @@ function VaultTableRow(props) {
                 <strong>TVL</strong>
             </div>
             <div className="d-flex flex-column text-center align-self-end">
-                <a href="#" className="btn btn-dark btn-lg" onClick={() => setExpanded(!expanded)}>More</a>
+                <a href="#" className="btn btn-primary btn-sm " onClick={() => setExpanded(!expanded)}>{expanded ? "▲" : "▼"}</a>
             </div>
         </div>
         {
@@ -280,12 +282,12 @@ function VaultTableRow(props) {
                             </span>
                             { // Approval switch
                                 approved ? (
-                                    <button className="btn btn-lg btn-dark"
+                                    <button className="btn btn-sm btn-primary"
                                             onClick={vault.depositAllPromise}>
                                         Deposit
                                     </button>
                                 ) : (
-                                    <button className="btn btn-lg btn-danger"
+                                    <button className="btn btn-sm btn-danger"
                                             onClick={vault.approvePromise}>
                                         Approve
                                     </button>
@@ -297,7 +299,7 @@ function VaultTableRow(props) {
                             <span className={"mb-3"}>
                             <strong>Deposited</strong>: {currentStake != null ? currentStake.toFixed(4) : 0} (${currentStakeUSD ? currentStakeUSD.toFixed(4) : 0})
                             </span>
-                            <button className="btn btn-lg btn-dark"
+                            <button className="btn btn-sm btn-primary"
                                     onClick={vault.withdrawAllPromise}>
                                 Withdraw
                             </button>
@@ -307,7 +309,7 @@ function VaultTableRow(props) {
                             <span className={"mb-3"}>
                                 <strong>Rewards</strong>: {rewards}
                             </span>
-                            <button className="btn btn-lg btn-success"
+                            <button className="btn btn-sm btn-success"
                                     onClick={async () => vault.harvestPromise()}>
                                 Compound
                             </button>

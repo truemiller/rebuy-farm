@@ -1,7 +1,7 @@
 body {
-  background-size: cover;
-  background-attachment: fixed;
-  background-position: top;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: top;
 }
 
 .text-muted {
@@ -9,12 +9,12 @@ body {
 }
 
 .bg-trans-1 {
-    background: rgba(225,225,255,0.25);
+    background: rgba(225, 225, 255, 0.25);
     backdrop-filter: blur(10px);
 }
 
 .bg-trans-2 {
-    background: rgba(225,225,255,0.95);
+    background: rgba(225, 225, 255, 0.95);
     backdrop-filter: blur(10px);
 }
 

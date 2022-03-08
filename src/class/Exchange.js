@@ -14,13 +14,10 @@ export default class Exchange {
     }
 
     getStableCoinPriceOf_Promise = async (address, stablecoinAddress = this.chain.stablecoinAddress) => {
-
         if (web3.utils.toChecksumAddress(address) === web3.utils.toChecksumAddress(stablecoinAddress)) {
             return "1000000000000000000"
         }
-
         const amountsOut = await this.router.functions.getAmountsOut("1000000000000000000", [address,this.chain.stablecoinAddress])
-
         const bFloat = amountsOut[0][1].toString()
         return (bFloat)
     }

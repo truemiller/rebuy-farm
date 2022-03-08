@@ -13,35 +13,34 @@ class LP extends Token {
         this.token0=token0
         this.token1=token1
         this.chain=chain
-        this.contract = new ethers.Contract(address, lpAbi, chain.defaultProvider())
     }
 
-    signerContract = () => {
-        return new ethers.Contract(this.address, lpAbi, Metamask.signer)
-    }
+    signerContract = () => new ethers.Contract(this.address, lpAbi, Metamask.signer)
+    providerContract = () => new ethers.Contract(this.address, lpAbi, this.chain.defaultProvider())
+
 
     balanceOfPromise = async () => {
         const address = await Metamask.address()
-        const balance = this.contract?.functions?.balanceOf(`${address[0]}`)
+        const balance = this.providerContract()?.functions?.balanceOf(`${address[0]}`)
         return balance
     }
 
-    lpRatioPromise = async () => this.contract.functions.getReserves().then(r => r._reserve0 / r._reserve1)
+    lpRatioPromise = async () => this.providerContract().functions.getReserves().then(r => r._reserve0 / r._reserve1)
 
     usdPerToken = async () => {
             if (!this.isSingle){
-
             // get the addresses of the two tokens in the LP
-            const token0Address = await this.contract.functions.token0().then(r => r[0])
-            const token1Address = await this.contract.functions.token1().then(r => r[0])
+            const token0Address = await this.providerContract().functions.token0().then(r => r[0])
+            const token1Address = await this.providerContract().functions.token1().then(r => r[0])
             // find the balance of each token
             const lpBalanceOfToken0 = await new ethers.Contract(token0Address ,erc20Abi, this.chain.defaultProvider())
                 .functions.balanceOf(this.address).then(r=> r.toString())
             const lpBalanceOfToken1 = await new ethers.Contract(token1Address ,erc20Abi, this.chain.defaultProvider())
                 .functions.balanceOf(this.address).then(r=> r.toString())
             // find the total supply of lp tokens
-            const lpTotalSupply = await this.contract.functions.totalSupply().then(r => r.toString())
+            const lpTotalSupply = await this.providerContract().functions.totalSupply().then(r => r.toString())
             // find the price of each token
+
             const token0Price = await this.exchange.getStableCoinPriceOf_Promise(token0Address)
             const token1Price = await this.exchange.getStableCoinPriceOf_Promise(token1Address)
 

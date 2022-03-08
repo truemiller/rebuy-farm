@@ -45,8 +45,8 @@ class Vault {
 
     isApprovedPromise = async () => {
         const address = await Metamask.address()
-        const allowance = await this.farm.token.contract.allowance(address[0], this.address)
-        const balanceOfOwner = await this.farm.token.contract.balanceOf(address[0])
+        const allowance = await this.farm.token.providerContract().allowance(address[0], this.address)
+        const balanceOfOwner = await this.farm.token.providerContract().balanceOf(address[0])
 
         let isApproved;
         isApproved = ethers.BigNumber.from(allowance).gt(ethers.BigNumber.from(balanceOfOwner));
