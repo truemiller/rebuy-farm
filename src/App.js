@@ -1,4 +1,3 @@
-import logo from './logo.svg'
 import {Fragment, useEffect, useState} from "react"
 import "./css/bootstrap.css"
 import "./css/App.css"
@@ -25,60 +24,67 @@ function App() {
 
     return (
         // accounts && chainId ?
-            <Fragment>
-                <div className="d-flex flex-column vh-100">
-                    <Navbar chainId={chainId} accounts={accounts}/>
-                    <main className="container mt-3">
-                        <header id="hero" className="text-center">
-                            <h1 className={"fw-bolder text-light display-1"}>Rebuy Farm</h1>
-                            <p className={"lead text-white-50"}>The cross chain yield optimizer</p>
-                        </header>
-                        <section className="row mb-3">
-                            <div className="col-md-3"/>
-                            <div className="col-md-6">
-                                <input type="text" className="form-control mb-3 shadow-lg" placeholder={"Search"}
-                                       onChange={event => setQuery(event.target.value)}/>
-                            </div>
-                        </section>
-                        <section>
-                            <VaultTable accounts={accounts} chainId={chainId} query={query}/>
-                        </section>
-                    </main>
-                    <footer className="footer bg-gradient mt-auto">
-                        <div className="navbar">
-                            <div className="container">
-                            <span className="text-white-50">&copy; <a href="//truemiller.com"
-                                                                      className={"text-decoration-none"}>True Miller</a> 2021. All rights reserved. This dApp (decentralized application) is in beta, use at your own risk. Smart contracts are experimental. Contact us <a
-                                href="//t.me/truemiller1">here</a>.</span>
-                            </div>
-
+        <Fragment>
+            <div className="d-flex flex-column vh-100">
+                <Navbar chainId={chainId} accounts={accounts}/>
+                <main className="container mt-3">
+                    <header id="hero" className="text-center">
+                        <h1 className={"fw-bolder  display-1"}>Rebuy Farm</h1>
+                        <p className={"lead "}>Compound and earn way more yield.</p>
+                    </header>
+                    <section className="row mb-3">
+                        <div className="col-md-3"/>
+                        <div className="col-md-6">
+                            <input type="text" className="form-control mb-3 shadow-sm" placeholder={"Search"}
+                                   onChange={event => setQuery(event.target.value)}/>
                         </div>
-                    </footer>
-                </div>
-            </Fragment>
-            // :
-            // <>
-            //     <Navbar/>
-            //     <header id="hero" className="text-center">
-            //         <h1 className={"fw-bolder text-light display-1"}>Rebuy Farm</h1>
-            //         <p className={"lead text-white-50"}>The cross chain yield optimizer</p>
-            //     </header>
-            //     <div className={"d-flex align-items-center justify-content-center"}>
-            //         <div className="card">
-            //             <div className="card-body">
-            //                 <a href="#" className="btn btn-primary" onClick={() => {
-            //                     window?.ethereum?.request({method: 'eth_requestAccounts'})
-            //                     window?.ethereum?.request({
-            //                         method: 'wallet_switchEthereumChain',
-            //                         params: [{chainId: '0xa86a'}], // chainId must be in hexadecimal numbers})
-            //                     })
-            //                 }
-            //                 }>Connect to Metamask</a>
-            //             </div>
-            //         </div>
-            //     </div>
-            // </>
+                    </section>
+                    <section>
+                        <VaultTable accounts={accounts} chainId={chainId} query={query}/>
+                    </section>
+                </main>
+                <Footer/>
+            </div>
+        </Fragment>
+        // :
+        // <>
+        //     <Navbar/>
+        //     <header id="hero" className="text-center">
+        //         <h1 className={"fw-bolder text-light display-1"}>Rebuy Farm</h1>
+        //         <p className={"lead text-white-50"}>The cross chain yield optimizer</p>
+        //     </header>
+        //     <div className={"d-flex align-items-center justify-content-center"}>
+        //         <div className="card">
+        //             <div className="card-body">
+        //                 <a href="#" className="btn btn-primary" onClick={() => {
+        //                     window?.ethereum?.request({method: 'eth_requestAccounts'})
+        //                     window?.ethereum?.request({
+        //                         method: 'wallet_switchEthereumChain',
+        //                         params: [{chainId: '0xa86a'}], // chainId must be in hexadecimal numbers})
+        //                     })
+        //                 }
+        //                 }>Connect to Metamask</a>
+        //             </div>
+        //         </div>
+        //     </div>
+        // </>
     );
+}
+
+function Footer(props) {
+    return <footer className="footer bg-gradient mt-auto border-top shadow-sm">
+        <div className="container d-flex">
+            <a href="//t.me/rebuyfarm" className="nav-link "><i className={"fab fa-telegram"}/>Telegram</a>
+            <a href="//twitter.com/rebuyfarm" className="nav-link ">Twitter</a>
+        </div>
+        <div className="navbar">
+            <div className="container">
+             <span className="">&copy; <a href="//truemiller.com" className={"text-decoration-none"}>True Miller</a> 2021. All rights reserved. This dApp (decentralized application) is in beta, use at your own risk. Smart contracts are experimental. Contact us <a
+                 href="//t.me/truemiller1">here</a>.</span>
+            </div>
+
+        </div>
+    </footer>
 }
 
 function Navbar(props) {
@@ -87,16 +93,15 @@ function Navbar(props) {
 
     const [dropdown, setDropdown] = useState(false)
 
-    return <nav className="navbar navbar-dark bg-gradient shadow">
+    return <nav className="navbar navbar-light bg-gradient shadow-sm border-bottom">
         <div className="container">
             <div className="d-flex align-self-start">
                 <a href="/" className="navbar-brand fw-bolder">Rebuy Farm</a>
-                <a href="//t.me/rebuyfarm" className="nav-link text-white">Telegram</a>
-                <a href="//twitter.com/rebuyfarm" className="nav-link text-white">Twitter</a>
             </div>
             <div className={"d-flex"}>
                 <a href={"#"}
-                   className="nav-link text-white" onClick={()=>window.ethereum.request({method: 'eth_requestAccounts'})}>{accounts && chainIds[chainId] ? `Connected to ${chainIds[chainId]}` : "Not connected"}</a>
+                   className="nav-link "
+                   onClick={() => window.ethereum.request({method: 'eth_requestAccounts'})}>{accounts && chainIds[chainId] ? `Connected to ${chainIds[chainId]}` : "Connect"}</a>
             </div>
         </div>
     </nav>
@@ -135,7 +140,7 @@ function VaultTable(props) {
                 :
                 <>
                     <div className="alert alert-danger" role="alert">
-                        There aren't any farms! Try using <a href="#" onClick={() =>
+                        There aren't any farms! Try connecting to <a href="#" onClick={() =>
                         window?.ethereum?.request({
                             method: 'wallet_switchEthereumChain',
                             params: [{chainId: '0xa86a'}], // chainId must be in hexadecimal numbers})
@@ -218,27 +223,28 @@ function VaultTableRow(props) {
         }
     }, [expanded])
 
-    return <div key={vaultKey} className={"card border shadow-lg"}>
+    return <div key={vaultKey} className={"card border shadow-sm"}>
         <div className={"card-body d-flex justify-content-between"}>
-            <div className={"text-center d-flex mt-auto mb-auto"}>
+            <div className={"text-center d-flex mt-auto mb-auto align-self-start text-center"} style={{width: 90}}>
                 <img loading={"lazy"} src={farm.token.token0.image}
                      alt={farm.platform.name + " logo"}
-                     title={farm.platform.name} height={24} width={24}/>
+                     title={farm.platform.name} height={36} width={36}
+                     style={{marginRight: -10}}/>
                 {!farm.token.isSingle ?
                     <img loading={"lazy"}
                          src={farm.token.token1.image}
                          alt={farm.platform.name + " logo"}
                          title={farm.platform.name}
                          className={"rounded-circle"}
-                         height={24} width={24}/> : null}
+                         height={36} width={36}/> : null}
             </div>
-            <div className="d-flex flex-column align-self-start">
+            <div className="d-flex flex-column align-self-start" style={{width: 100}}>
                 <strong>{farm.name}</strong>
                 <strong className={"fw-bolder d-inline-block"}>
                     <a className={"text-decoration-none text-truncate"}
                        href={farm.exchange.url}>{farm.exchange.name}</a></strong>
             </div>
-            <div className="d-flex flex-column text-center">
+            <div className="d-flex flex-column text-center" style={{width: 100}}>
                 {parseFloat(wallet).toFixed(4)}
                 <strong>Balance</strong>
             </div>
@@ -246,16 +252,16 @@ function VaultTableRow(props) {
                 {parseFloat(deposited).toFixed(4)}
                 <strong>Deposited</strong>
             </div>
-            <div className="d-flex flex-column text-center">
-                {apy ? apy.toFixed(2) : <Skeleton/>}%
-                <strong>APY</strong>
+            <div className="d-flex flex-column text-center text-success">
+                {apy.toFixed(2)}%
+                <strong className={"text-black"}>APY</strong>
             </div>
             <div className="d-flex flex-column text-center">
-                {apy ? (apy / 365).toFixed(2) : <Skeleton/>}%
+                {(apy / 365).toFixed(2)}%
                 <strong>Daily</strong>
             </div>
             <div className="d-flex flex-column text-center">
-                ${tvlUSD != null ? tvlUSD.toFixed(2).toLocaleString() : <Skeleton/>}
+                ${tvlUSD.toFixed(2).toLocaleString()}
                 <strong>TVL</strong>
             </div>
             <div className="d-flex flex-column text-center align-self-end">
@@ -266,9 +272,9 @@ function VaultTableRow(props) {
             expanded ?
                 <div className="card-footer">
                     {vault.note ? <div className={"alert alert-info"}>{vault.note}</div> : null}
-                    <div className="row">
+                    <div className="row mb-3">
                         <div className="col-md-4 d-flex flex-column">
-                            <h3>Wallet</h3>
+                            <h3 className={"fw-bolder"}>Wallet</h3>
                             <span className={"mb-3"}>
                             <strong>Balance</strong>: {wallet} (${wallet})
                             </span>
@@ -287,7 +293,7 @@ function VaultTableRow(props) {
                             }
                         </div>
                         <div className="col-md-4 d-flex flex-column">
-                            <h3>Vault</h3>
+                            <h3 className={"fw-bolder"}>Vault</h3>
                             <span className={"mb-3"}>
                             <strong>Deposited</strong>: {currentStake != null ? currentStake.toFixed(4) : 0} (${currentStakeUSD ? currentStakeUSD.toFixed(4) : 0})
                             </span>
@@ -297,9 +303,9 @@ function VaultTableRow(props) {
                             </button>
                         </div>
                         <div className="col-md-4 d-flex flex-column">
-                            <h3>Pending</h3>
+                            <h3 className={"fw-bolder"}>Pending</h3>
                             <span className={"mb-3"}>
-                                <strong>Rewards</strong>: {rewards ? rewards : <Skeleton/>}
+                                <strong>Rewards</strong>: {rewards}
                             </span>
                             <button className="btn btn-lg btn-success"
                                     onClick={async () => vault.harvestPromise()}>
@@ -308,7 +314,6 @@ function VaultTableRow(props) {
 
                         </div>
                     </div>
-                    <hr/>
                     <table className={"table table-sm table-bordered"}>
                         <tbody>
                         <tr>

@@ -24,11 +24,12 @@ class Farm {
         const emissionsPerHour=emissionsPerMinute*60
         const emissionsPerDay=emissionsPerHour*24
         const emissionsPerYear=emissionsPerDay*365
+
         // calc price of yearly emissions
         const rewardTokenAddress = await this.contract.functions.rewardsToken().then(r=>r[0]);
         const priceOfRewardToken = await this.exchange.getStableCoinPriceOf_Promise(rewardTokenAddress);
-
         const priceOfYearlyEmissions = priceOfRewardToken * emissionsPerYear
+
         // get total staked (tvl)
         const priceOfLP = await this.token.usdPerToken()
         const balanceOfPoolWei = await this.token.contract.balanceOf(this.address).then(r=>r.toString())
