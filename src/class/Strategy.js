@@ -10,10 +10,12 @@ class Strategy {
         this.address = address
     }
 
-    providerContract = () => new ethers.Contract(this.address, strategyAbi, this.chain.defaultProvider)
+    providerContract = () => new ethers.Contract(this.address, strategyAbi, this.chain.defaultProvider())
     signerContract = () => new ethers.Contract(this.address, strategyAbi, Metamask.signer)
     harvestPromise = async () => this.signerContract.functions.harvest()
-    rewardsAvailablePromise = async () => web3.utils.fromWei(await this.providerContract().functions.rewardsAvailable().then(r => r.toString()))
+    rewardsAvailablePromise = async () => web3.utils.fromWei(
+        await this.providerContract().rewardsAvailable().then(r => r.toString())
+    )
 }
 
 class MasterChefStrategy extends Strategy{

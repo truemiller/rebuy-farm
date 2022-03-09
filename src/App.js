@@ -220,12 +220,8 @@ function VaultTableRow(props) {
         if (expanded) {
             const isApproved = await vault.isApprovedPromise()
             setApproved(isApproved)
-            try{
-                const rewards = await vault.strategy.rewardsAvailablePromise().then(r => r)
-                setRewards(rewards)
-            }catch (e) {
-
-            }
+            const rewards = await vault.strategy.rewardsAvailablePromise().then(r => r)
+            setRewards(rewards)
             setWalletUsd(wallet * lpUsd)
         }
     }, [expanded])
@@ -272,7 +268,8 @@ function VaultTableRow(props) {
                 <strong>TVL</strong>
             </div>
             <div className="d-flex flex-column text-center align-self-end">
-                <a href="#" className="btn btn-primary btn-sm " onClick={() => setExpanded(!expanded)}>{expanded ? "▲" : "▼"}</a>
+                <a href="#" className="btn btn-primary btn-sm "
+                   onClick={() => setExpanded(!expanded)}>{expanded ? "▲" : "▼"}</a>
             </div>
         </div>
         {
