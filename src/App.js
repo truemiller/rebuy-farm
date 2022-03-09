@@ -283,7 +283,7 @@ function VaultTableRow(props) {
                         <div className="col-md-4 d-flex flex-column">
                             <h3 className={"fw-bolder"}>Wallet</h3>
                             <span className={"mb-3"}>
-                            <strong>Balance</strong>: {wallet.toFixed(4)}
+                            <strong>Balance</strong>: {wallet}
                             </span>
                             { // Approval switch
                                 approved ? (
