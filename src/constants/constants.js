@@ -70,7 +70,7 @@ export const farms = {
     elkPng: new Farm(chains.avax, "ELKPNG", "0xcF025C16C9cD72EEBf0513A1ed8f588F99d1Bcd9", lps.elkPng, platforms.elk, exchanges.elk),
     elkElk: new Farm(chains.avax, "ELK SINGLE", "0xB105D4D17a09397960f2678526A4063A64FAd9bd", lps.elkElk, platforms.elk, exchanges.elk),
     /// joe
-    ustUsdce: new FarmChef(chains.avax, "USTUSDCE", "0x188bed1968b795d5c9022f6a0bb5931ac4c18f00", lps.ustUsdce, platforms.elk, exchanges.joe, 31),
+    ustUsdce: new FarmChef(chains.avax, "USTUSDCE", "0x188bed1968b795d5c9022f6a0bb5931ac4c18f00", lps.ustUsdce, platforms.elk, exchanges.joe, 49),
     // matic
     /// elk
     maticElkElk: new Farm(chains.matic, "ELK SINGLE", "0xB8CBce256a713228F690AC36B6A0953EEd58b957", lps.maticElkElk, platforms.elk, exchanges.maticElk),

@@ -33,7 +33,7 @@ class Vault {
 
         // approve contract to spend lp
         if ( await this.isApprovedPromise ){
-            const balance = await this.farm.token.contract?.functions?.balanceOf(`${address[0]}`)
+            const balance = await this.farm.token.signerContract()?.functions?.balanceOf(`${address[0]}`)
             await new ethers.Contract(this.address, vaultAbi, Metamask.signer).functions.deposit(balance.toString())
         }
         //

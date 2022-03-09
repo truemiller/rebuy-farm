@@ -14,6 +14,4 @@ K
 <
 package.json,7\0\7030d0b2f71b999ff89a343de08c414af32fc93a
 B
-src/class/Token.js,3\8\387d9e0715f675cc8ed53ac2f9f2570746771e77
-B
 src/class/Chain.js,f\0\f0c6967ef0bb5dbe36a465cd91347732acdb4928

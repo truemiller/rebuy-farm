@@ -53,8 +53,13 @@ export class FarmChef extends Farm {
     signerContract = () => new ethers.Contract(this.address, masterchefv3Abi, Metamask.signer)
 
     aprPromise = async () => {
-        const poolInfo = await this.signerContract().functions.poolInfo(49).then(r=>r)
-        const emissions = poolInfo.accJoePerShare.toString()
+        const poolInfo = await this.providerContract().functions.poolInfo(49).then(r=>r)
+        let allocPoints = parseFloat(poolInfo.allocPoint)
+        let joePerSec = await this.providerContract().functions.joePerSec().then(r=>r.toString())
+        let totalAllocPoints = await this.providerContract().functions.totalAllocPoint().then(r=>r.toString())
+        let poolWeight = parseFloat(allocPoints/totalAllocPoints).toFixed()
+        let emissions = parseFloat(joePerSec * poolWeight)
+
         //calculate yearly emissions
         const emissionsGwei = web3.utils.fromWei(emissions)
         const blockRate = this.chain.blocktime
@@ -63,6 +68,7 @@ export class FarmChef extends Farm {
         const emissionsPerHour=emissionsPerMinute*60
         const emissionsPerDay=emissionsPerHour*24
         const emissionsPerYear=emissionsPerDay*365
+
         // calc price of yearly emissions
         const rewardTokenAddress = await this.providerContract().functions.JOE().then(r=>r[0]);
         const priceOfRewardToken = await this.exchange.getStableCoinPriceOf_Promise(rewardTokenAddress);
@@ -71,10 +77,9 @@ export class FarmChef extends Farm {
         // get total staked (tvl)
         const priceOfLP = await this.token.usdPerToken()
         const balanceOfPoolWei = await this.token.providerContract().balanceOf(this.address).then(r=>r.toString())
-
-
         const balanceOfPool = web3.utils.fromWei(balanceOfPoolWei)
         const priceOfPool = balanceOfPool * priceOfLP
+
         // apr
         const apr = priceOfYearlyEmissions / priceOfPool
         return apr / 100 / 100
