@@ -54,7 +54,7 @@ export const lps = {
     elkPng: new LP(chains.avax, "ELK/PNG LP", "0x8ea0328052F094E8136cA91faB08d07DDbb1366f", tokens.elk, tokens.png, exchanges.elk, false),
     elkElk: new LP(chains.avax, "ELK/ELK LP", "0xE1C110E1B1b4A1deD0cAf3E42BfBdbB7b5d7cE1C", tokens.elk, tokens.elk, exchanges.elk, true),
     /// joe
-    ustUsdce: new LP(chains.avax, "UST/USDC.E JLP", "0x70aC8E9F324800e7f20B31EceA9210E0D2B4B4b9", tokens.ust, tokens.usdce, exchanges.joe, false),
+    ustUsdce: new LP(chains.avax, "UST/USDC.E JLP", "0xA3A029224857bF467E896523E268a5fc005Ce810", tokens.ust, tokens.usdce, exchanges.joe, false),
     // matic
     maticElkElk: new LP(chains.matic, "ELK/ELK LP", "0xE1C110E1B1b4A1deD0cAf3E42BfBdbB7b5d7cE1C", tokens.elk, tokens.elk, exchanges.maticElk, true),
     maticElkMatic: new LP(chains.matic, "ELK/ELK LP", "0x7Cb0703aa37601a02798BDFF63A18aF2dD082572", tokens.elk, tokens.matic, exchanges.maticElk, false),

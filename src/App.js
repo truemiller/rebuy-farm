@@ -26,11 +26,18 @@ function App() {
         // accounts && chainId ?
         <Fragment>
             <div className="d-flex flex-column vh-100">
+                <div className="bg-light border-bottom">
+                    <div className="container d-flex justify-content-start">
+                        <a href="https://truemiller.gitbook.io/rebuy-farm/" className={"nav-link"}>Docs</a>
+                        <a href="//t.me/rebuyfarm" className="nav-link "><i className={"fab fa-telegram"}/>Telegram</a>
+                        <a href="//twitter.com/rebuyfarm" className="nav-link ">Twitter</a>
+                    </div>
+                </div>
                 <Navbar chainId={chainId} accounts={accounts}/>
                 <main className="container mt-3">
                     <header id="hero" className="text-center">
                         <h1 className={"fw-bolder  display-1"}>Rebuy Farm</h1>
-                        <p className={"lead "}>Compound and earn way more yield.</p>
+                        <p className={"lead "}>Compound and multiply your yield.</p>
                     </header>
                     <section className="row mb-3">
                         <div className="col-md-3"/>
@@ -73,12 +80,6 @@ function App() {
 
 function Footer(props) {
     return <footer className="footer bg-gradient mt-auto border-top shadow-sm">
-        <div className="navbar bg-light">
-            <div className="container d-flex justify-content-start">
-                <a href="//t.me/rebuyfarm" className="nav-link "><i className={"fab fa-telegram"}/>Telegram</a>
-                <a href="//twitter.com/rebuyfarm" className="nav-link ">Twitter</a>
-            </div>
-        </div>
         <div className="navbar bg-light navbar-dark">
             <div className="container">
              <span className="">&copy; <a href="//truemiller.com" className={"text-decoration-none"}>True Miller</a> 2021. All rights reserved. This dApp (decentralized application) is in beta, use at your own risk. Smart contracts are experimental. Contact us <a
@@ -219,8 +220,12 @@ function VaultTableRow(props) {
         if (expanded) {
             const isApproved = await vault.isApprovedPromise()
             setApproved(isApproved)
-            const rewards = await vault.strategy.rewardsAvailablePromise().then(r => r)
-            setRewards(rewards)
+            try{
+                const rewards = await vault.strategy.rewardsAvailablePromise().then(r => r)
+                setRewards(rewards)
+            }catch (e) {
+
+            }
             setWalletUsd(wallet * lpUsd)
         }
     }, [expanded])
